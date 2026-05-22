@@ -1,0 +1,874 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aarya Shah — AI Automation Engineer</title>
+  <meta name="description" content="Aarya Shah — I build the systems, automations and infrastructure around AI models. Six layers, one stack." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Geist:wght@400;500;600;700&display=swap" />
+
+  <style>
+    /* ── Design tokens — dark mode, iris accent ─────────────────────────── */
+    :root {
+      --cream: #15130d;
+      --cream-2: #1c1916;
+      --cream-3: #2a261f;
+      --paper: #1c1916;
+      --ink: #f0ece2;
+      --ink-2: #d2cdc0;
+      --muted: #9a9485;
+      --muted-2: #6e695d;
+      --rule: #3a3528;
+      --rule-soft: #2a261f;
+
+      --accent: #8b5cf6;
+      --accent-soft: rgba(139, 92, 246, 0.22);
+
+      --serif: 'Instrument Serif', ui-serif, Georgia, serif;
+      --sans: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+      --pad: 48px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--cream);
+      color: var(--ink);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    section, footer { scroll-margin-top: 20px; }
+
+    .serif   { font-family: var(--serif); font-weight: 400; letter-spacing: -0.01em; }
+    .serif-i { font-family: var(--serif); font-style: italic; font-weight: 400; }
+    .mono    { font-family: var(--mono); font-feature-settings: 'ss01' 1, 'zero' 1; }
+    .accent  { color: var(--accent); }
+
+    a { color: inherit; }
+
+    .wrap-1200 { max-width: 1200px; margin: 0 auto; }
+    .wrap-1100 { max-width: 1100px; margin: 0 auto; }
+
+    /* ── Side nav (scrollspy) ────────────────────────────────────────────── */
+    .sidenav {
+      position: fixed; right: 14px; top: 50%; transform: translateY(-50%);
+      display: flex; flex-direction: column; gap: 2px;
+      padding: 14px 10px; z-index: 40;
+      opacity: 0; pointer-events: none; transition: opacity 0.5s;
+    }
+    .sidenav.is-visible { opacity: 1; pointer-events: auto; }
+    .sidenav a {
+      display: flex; align-items: center; justify-content: flex-end; gap: 10px;
+      padding: 6px 4px; text-decoration: none; color: var(--muted);
+    }
+    .sidenav-label {
+      font-family: var(--mono); font-size: 10px;
+      text-transform: uppercase; letter-spacing: 0.12em; white-space: nowrap;
+      color: var(--ink-2);
+      opacity: 0; transform: translateX(6px);
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .sidenav.is-hovered .sidenav-label,
+    .sidenav a.is-on .sidenav-label { opacity: 1; transform: translateX(0); }
+    .sidenav a.is-on .sidenav-label { color: var(--accent); }
+    .sidenav-dot {
+      flex-shrink: 0; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--muted-2); transition: all 0.2s;
+    }
+    .sidenav a.is-on .sidenav-dot { width: 8px; height: 8px; background: var(--accent); }
+
+    /* ── Hero ────────────────────────────────────────────────────────────── */
+    .hero {
+      display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+      gap: 40px; align-items: center; padding: 72px var(--pad) 80px;
+    }
+    .hero-hi {
+      font-family: var(--serif); font-style: italic;
+      font-size: clamp(20px, 2.4vw, 26px); color: var(--accent);
+      margin-bottom: 14px; letter-spacing: -0.01em;
+    }
+    .hero h1 {
+      font-family: var(--serif); font-weight: 400;
+      font-size: clamp(32px, 4.6vw, 60px); line-height: 1.06;
+      margin: 0; letter-spacing: -0.025em;
+    }
+    .hero-lede {
+      margin-top: 26px; font-size: 17px; line-height: 1.55;
+      color: var(--ink-2); max-width: 540px;
+    }
+    .hero-stats {
+      margin-top: 32px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px; max-width: 480px;
+    }
+    .stat-k { font-family: var(--serif); font-size: 32px; line-height: 1; letter-spacing: -0.02em; }
+    .stat-v {
+      font-family: var(--mono); font-size: 10px; color: var(--muted);
+      margin-top: 6px; text-transform: uppercase; letter-spacing: 0.05em; line-height: 1.35;
+    }
+
+    /* ── Hero visual: layered fan ────────────────────────────────────────── */
+    .fan { position: relative; height: 460px; perspective: 1100px; }
+    .fan-card {
+      position: absolute; left: 50%; top: 50%;
+      width: min(380px, 96%); height: 200px;
+      border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 20px;
+      padding: 22px; text-align: left; cursor: pointer;
+      color: #17150f; overflow: hidden; font-family: inherit;
+      display: flex; flex-direction: column;
+      transition: transform 0.42s cubic-bezier(0.2, 0.7, 0.3, 1), box-shadow 0.25s;
+    }
+    .fan-layer {
+      font-family: var(--mono); font-size: 10px;
+      letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.7;
+    }
+    .fan-name {
+      font-family: var(--serif); font-size: clamp(22px, 2.2vw, 28px);
+      line-height: 1.1; margin-top: 12px; letter-spacing: -0.01em;
+    }
+    .fan-sub { display: none; font-size: 12.5px; line-height: 1.4; margin-top: 8px; color: #2c2820; }
+    .fan-chips { display: none; margin-top: auto; padding-top: 10px; flex-wrap: wrap; gap: 5px; }
+    .fan-card.is-active .fan-sub { display: block; }
+    .fan-card.is-active .fan-chips { display: flex; }
+    .fan-chip {
+      font-family: var(--mono); font-size: 10px; padding: 2px 7px; border-radius: 999px;
+      background: rgba(255, 255, 255, 0.75); border: 1px solid rgba(0, 0, 0, 0.05); color: #2c2820;
+    }
+
+    /* ── Shipped panel (drawer) ──────────────────────────────────────────── */
+    .shipped { padding: 0 var(--pad) 64px; }
+    .shipped-toggle {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 18px; background: var(--ink); color: var(--cream);
+      border: none; border-radius: 999px; cursor: pointer;
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .shipped-toggle-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+    .shipped-body {
+      margin-top: 12px; padding: 22px 26px;
+      background: var(--paper); border: 1px solid var(--rule); border-radius: 16px;
+    }
+    .shipped-head {
+      display: flex; align-items: baseline; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap; margin-bottom: 14px;
+    }
+    .shipped-head-l { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+    .shipped-kicker {
+      font-size: 10.5px; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 0.12em;
+    }
+    .shipped-layer { font-size: 18px; color: var(--muted); }
+    .shipped-count { font-size: 10px; color: var(--muted-2); }
+    .shipped-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;
+    }
+    .shipped-row {
+      padding: 12px 14px; background: var(--cream-2);
+      border: 1px solid var(--rule-soft); border-radius: 10px;
+      display: grid; grid-template-columns: 80px 1fr; gap: 14px; align-items: baseline;
+    }
+    .shipped-at { font-size: 17px; color: var(--accent); }
+    .shipped-what { font-size: 13px; line-height: 1.5; color: var(--ink-2); }
+
+    /* ── Section header (numbered) ───────────────────────────────────────── */
+    .sec-head {
+      display: grid; grid-template-columns: 110px 1fr auto;
+      gap: 28px; align-items: baseline;
+      margin-bottom: 32px; padding-bottom: 16px; border-bottom: 1px solid var(--rule);
+    }
+    .sec-num { font-family: var(--serif); font-style: italic; font-size: 64px; line-height: 0.9; color: var(--accent); }
+    .sec-title {
+      font-family: var(--serif); font-weight: 400;
+      font-size: clamp(28px, 3.4vw, 40px); margin: 0; letter-spacing: -0.02em;
+    }
+    .sec-blurb {
+      font-family: var(--mono); font-size: 11px; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.08em; max-width: 300px; text-align: right;
+    }
+
+    /* ── Capability matrix (compass / quadrant) ──────────────────────────── */
+    .capabilities { padding: 20px var(--pad) 96px; }
+    .compass {
+      position: relative; min-height: 520px; padding: 40px 0;
+      display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+    }
+    .compass-cross { position: absolute; inset: 0; pointer-events: none; }
+    .compass-vline { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--rule); }
+    .compass-hline { position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--rule); }
+    .compass-hub {
+      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+      width: 56px; height: 56px; border-radius: 50%; background: var(--accent);
+      display: grid; place-items: center;
+      font-family: var(--serif); font-style: italic; font-size: 28px; color: #fff;
+    }
+    .compass-item { padding: 24px 36px; }
+    .compass-item.ci0 { text-align: right; align-self: end; }
+    .compass-item.ci1 { text-align: left;  align-self: end; }
+    .compass-item.ci2 { text-align: right; align-self: start; }
+    .compass-item.ci3 { text-align: left;  align-self: start; }
+    .compass-num { font-family: var(--serif); font-style: italic; font-size: 28px; color: var(--accent); line-height: 1; margin-bottom: 6px; }
+    .compass-name { font-family: var(--serif); font-size: clamp(20px, 2.4vw, 28px); letter-spacing: -0.015em; line-height: 1.1; }
+    .compass-desc { font-size: 13.5px; line-height: 1.55; color: var(--ink-2); margin-top: 8px; }
+
+    /* ── Toolbox (workshop drawers) ──────────────────────────────────────── */
+    .toolbox { padding: 0 var(--pad) 96px; }
+    .tb-cabinet {
+      background: var(--cream-3); padding: 14px; border-radius: 12px;
+      border: 2px solid var(--ink); box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12);
+    }
+    .tb-drawer { margin-bottom: 8px; }
+    .tb-front {
+      width: 100%; display: grid; grid-template-columns: 36px 1fr auto 36px;
+      gap: 12px; align-items: center; padding: 12px 18px;
+      background: var(--paper); border: 1px solid var(--rule); border-radius: 6px;
+      cursor: pointer; text-align: left; font-family: inherit; color: var(--ink);
+      box-shadow: 0 1px 0 var(--ink);
+      transition: background 0.2s, transform 0.2s;
+    }
+    .tb-drawer.is-open .tb-front {
+      background: var(--accent-soft); border-color: var(--accent);
+      box-shadow: 0 1px 0 var(--ink), 0 4px 8px -3px rgba(0, 0, 0, 0.12);
+      transform: translateY(-1px);
+    }
+    .tb-dnum { font-family: var(--serif); font-style: italic; font-size: 16px; color: var(--muted); }
+    .tb-dcat { font-family: var(--mono); font-size: 11px; color: var(--ink); text-transform: uppercase; letter-spacing: 0.1em; }
+    .tb-drawer.is-open .tb-dcat { color: var(--accent); }
+    .tb-dcount { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+    .tb-handle { width: 24px; height: 4px; background: var(--ink); border-radius: 2px; justify-self: end; opacity: 0.7; }
+    .tb-items { display: none; padding: 12px 16px 4px; flex-wrap: wrap; gap: 5px; }
+    .tb-drawer.is-open .tb-items { display: flex; }
+    .tb-item {
+      font-family: var(--mono); font-size: 11px; padding: 4px 10px; border-radius: 4px;
+      background: var(--paper); border: 1px solid var(--rule); color: var(--ink-2);
+    }
+    .tb-note {
+      font-family: var(--serif); font-style: italic;
+      margin-top: 18px; font-size: 14px; color: var(--muted);
+    }
+
+    /* ── Career (accordion) ──────────────────────────────────────────────── */
+    .career { padding: 0 var(--pad) 96px; }
+    .accordion {
+      border: 1px solid var(--rule); border-radius: 14px;
+      overflow: hidden; background: var(--paper);
+    }
+    .acc-item { border-bottom: 1px solid var(--rule-soft); }
+    .acc-item:last-child { border-bottom: none; }
+    .acc-head {
+      width: 100%; display: grid; grid-template-columns: 110px 1fr auto;
+      gap: 20px; align-items: center; padding: 22px 28px;
+      background: transparent; border: none; cursor: pointer;
+      text-align: left; font-family: inherit; color: var(--ink);
+      transition: background 0.2s;
+    }
+    .acc-item.is-open .acc-head { background: var(--accent-soft); }
+    .acc-date {
+      font-size: 11px; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .acc-role { font-family: var(--serif); font-size: clamp(20px, 2.4vw, 26px); letter-spacing: -0.015em; }
+    .acc-org { font-family: var(--serif); font-style: italic; font-size: 16px; color: var(--accent); margin-left: 10px; }
+    .acc-toggle { font-size: 18px; color: var(--muted); }
+    .acc-item.is-open .acc-toggle { color: var(--accent); }
+    .acc-panel { display: none; padding: 4px 32px 28px 138px; }
+    .acc-item.is-open .acc-panel { display: block; }
+    .acc-meta {
+      font-size: 11px; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;
+    }
+    .acc-bullets { margin: 0; padding-left: 18px; }
+    .acc-bullets li { font-size: 14.5px; line-height: 1.6; margin-bottom: 6px; color: var(--ink-2); }
+    .shipstrip { margin-top: 18px; padding-top: 16px; border-top: 1px dashed var(--rule); }
+    .shipstrip-label {
+      font-family: var(--mono); font-size: 10px; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px;
+    }
+    .shipstrip-list { display: grid; gap: 12px; }
+    .shipstrip-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; align-items: baseline; }
+    .shipstrip-name { font-family: var(--serif); font-size: 18px; letter-spacing: -0.01em; }
+    .shipstrip-desc { font-size: 13.5px; line-height: 1.5; color: var(--ink-2); margin-top: 2px; }
+    .shipstrip-links { display: flex; gap: 14px; flex-wrap: wrap; justify-content: flex-end; }
+    .shipstrip-links a {
+      font-family: var(--mono); font-size: 10.5px; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--accent); text-decoration: none; white-space: nowrap;
+    }
+
+    /* ── Education (plaque) ──────────────────────────────────────────────── */
+    .education { padding: 0 var(--pad) 80px; }
+    .plaque {
+      position: relative; border-radius: 4px; border: 3px double var(--ink);
+      background: linear-gradient(to bottom, var(--cream-2), var(--paper));
+      padding: clamp(32px, 4vw, 56px) clamp(28px, 4vw, 48px); text-align: center;
+    }
+    .plaque-inner { position: absolute; inset: 8px; border: 1px solid var(--rule); border-radius: 2px; pointer-events: none; }
+    .plaque-kicker {
+      font-family: var(--mono); font-size: 10px; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 0.18em; margin-bottom: 14px;
+    }
+    .plaque-degree { font-family: var(--serif); font-size: clamp(24px, 3vw, 34px); letter-spacing: -0.015em; line-height: 1.2; }
+    .plaque-uni { font-family: var(--serif); font-style: italic; font-size: clamp(16px, 2vw, 22px); color: var(--accent); margin-top: 4px; }
+    .plaque-dates {
+      font-family: var(--mono); font-size: 11px; color: var(--muted);
+      margin-top: 10px; text-transform: uppercase; letter-spacing: 0.1em;
+    }
+    .plaque-rule-lg { width: 60px; height: 1px; background: var(--accent); margin: 0 auto 18px; }
+    .plaque-rule-sm { width: 30px; height: 1px; background: var(--rule); margin: 24px auto; }
+    .plaque-selected {
+      font-family: var(--mono); font-size: 10px; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 8px;
+    }
+    .plaque-award { font-family: var(--serif); font-size: clamp(18px, 2.2vw, 24px); letter-spacing: -0.01em; }
+
+    /* ── Footer ──────────────────────────────────────────────────────────── */
+    .footer { padding: 32px var(--pad) 40px; }
+    .footer-inner { padding-top: 36px; border-top: 1px solid var(--rule); }
+    .footer-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      flex-wrap: wrap; gap: 24px;
+    }
+    .footer-cta {
+      font-family: var(--serif); font-size: clamp(28px, 3.6vw, 40px);
+      letter-spacing: -0.02em; line-height: 1.1; max-width: 620px;
+    }
+    .footer-socials { display: flex; gap: 6px; }
+    .footer-social {
+      display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%;
+      color: var(--ink-2); border: 1px solid var(--rule); background: var(--paper);
+      text-decoration: none; transition: color 0.2s, border-color 0.2s, transform 0.2s;
+    }
+    .footer-social:hover { color: var(--accent); border-color: var(--accent); transform: translateY(-2px); }
+    .footer-copy {
+      margin-top: 28px; font-family: var(--mono); font-size: 10.5px; color: var(--muted);
+      text-align: center; text-transform: uppercase; letter-spacing: 0.12em;
+    }
+
+    /* ── Responsive ──────────────────────────────────────────────────────── */
+    @media (max-width: 880px) {
+      :root { --pad: 24px; }
+      .hero { grid-template-columns: 1fr; gap: 28px; padding-top: 44px; padding-bottom: 56px; }
+      .acc-head { grid-template-columns: 84px 1fr auto; gap: 14px; padding: 20px; }
+      .acc-panel { padding: 4px 20px 24px; }
+      .compass-item { padding: 16px 16px; }
+    }
+    @media (max-width: 760px) {
+      .sec-head { grid-template-columns: auto 1fr; gap: 14px 18px; }
+      .sec-num { font-size: 44px; }
+      .sec-blurb { grid-column: 1 / -1; text-align: left; max-width: none; }
+    }
+    @media (max-width: 520px) {
+      .hero-stats { grid-template-columns: 1fr 1fr; }
+      .shipstrip-item { grid-template-columns: 1fr; }
+      .shipstrip-links { justify-content: flex-start; }
+      .compass { min-height: 440px; }
+      .footer-row { align-items: flex-start; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .fan-card { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Side nav (scrollspy, built by script) ────────────────────────────── -->
+  <nav class="sidenav" id="sidenav" aria-label="Sections"></nav>
+
+  <!-- ── Hero ─────────────────────────────────────────────────────────────── -->
+  <section class="hero wrap-1200" id="hero">
+    <div>
+      <div class="hero-hi">Hi, I&rsquo;m Aarya Shah.</div>
+      <h1>AI is mostly engineering. I build the <span class="serif-i accent">systems, automations and infrastructure</span> around the model.</h1>
+      <p class="hero-lede">
+        From voice models to webhook plumbing, I work across every layer between an AI idea
+        and a system that actually runs.
+        <span class="serif-i accent">Always glad to meet others building in this space.</span>
+      </p>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-k">50+</div>
+          <div class="stat-v">automations shipped</div>
+        </div>
+        <div>
+          <div class="stat-k">3.8k+</div>
+          <div class="stat-v">HF model downloads</div>
+        </div>
+        <div>
+          <div class="stat-k">3</div>
+          <div class="stat-v">companies, same playbook</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="fan" id="fan"><!-- rendered by script --></div>
+    </div>
+  </section>
+
+  <!-- ── Shipped panel — drawer, tracks the active stack layer ────────────── -->
+  <section class="shipped wrap-1200">
+    <button class="shipped-toggle" id="shippedToggle" aria-expanded="true" aria-controls="shippedBody">
+      <span class="shipped-toggle-dot"></span>
+      <span id="shippedToggleText">&mdash; Hide what I shipped</span>
+    </button>
+    <div class="shipped-body" id="shippedBody"><!-- rendered by script --></div>
+  </section>
+
+  <!-- ── Capability matrix — compass ──────────────────────────────────────── -->
+  <section class="capabilities wrap-1200" id="capabilities">
+    <div class="sec-head">
+      <div class="sec-num">01</div>
+      <h2 class="sec-title">What I do, <span class="serif-i accent">broadly.</span></h2>
+      <span class="sec-blurb">
+        Business-first, technical enough to ship. AI systems only work when they connect
+        to real data, real teams, and real failure modes.
+      </span>
+    </div>
+    <div class="compass">
+      <div class="compass-cross" aria-hidden="true">
+        <div class="compass-vline"></div>
+        <div class="compass-hline"></div>
+        <div class="compass-hub">+</div>
+      </div>
+      <div class="compass-item ci0">
+        <div class="compass-num">01</div>
+        <div class="compass-name">AI Systems</div>
+        <div class="compass-desc">Agents, RAG, fine-tuning, turn detection, voice agents, prompt engineering, LLM pipelines.</div>
+      </div>
+      <div class="compass-item ci1">
+        <div class="compass-num">02</div>
+        <div class="compass-name">Automation</div>
+        <div class="compass-desc">Make, n8n, workflow debugging, replay scripts, Slack ops, CRM sync, Stripe automation.</div>
+      </div>
+      <div class="compass-item ci2">
+        <div class="compass-num">03</div>
+        <div class="compass-name">Product Engineering</div>
+        <div class="compass-desc">Python, TypeScript, Go, Dart/Flutter, backend APIs, app surfaces, admin tooling.</div>
+      </div>
+      <div class="compass-item ci3">
+        <div class="compass-num">04</div>
+        <div class="compass-name">Platform</div>
+        <div class="compass-desc">Cloud functions, Kubernetes manifests, internal APIs, Firestore, Snowflake, observability tooling.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Toolbox — workshop drawers ───────────────────────────────────────── -->
+  <section class="toolbox wrap-1200" id="toolbox">
+    <div class="sec-head">
+      <div class="sec-num">02</div>
+      <h2 class="sec-title">Toolbox <span class="serif-i" style="color: var(--muted)">&mdash; the honest version.</span></h2>
+      <span class="sec-blurb">66 tools · 10 categories</span>
+    </div>
+    <div class="tb-cabinet" id="tbCabinet"><!-- rendered by script --></div>
+    <div class="tb-note">&mdash; Most of this lives behind login walls. The pattern shows up the same in every project.</div>
+  </section>
+
+  <!-- ── Career — accordion ───────────────────────────────────────────────── -->
+  <section class="career wrap-1200" id="career">
+    <div class="sec-head">
+      <div class="sec-num">03</div>
+      <h2 class="sec-title">Three roles, <span class="serif-i accent">same playbook.</span></h2>
+      <span class="sec-blurb">Vadodara &rarr; Surat &rarr; Melbourne</span>
+    </div>
+    <div class="accordion" id="accordion"><!-- rendered by script --></div>
+  </section>
+
+  <!-- ── Education — plaque ───────────────────────────────────────────────── -->
+  <section class="education wrap-1100" id="education">
+    <div class="plaque">
+      <div class="plaque-inner"></div>
+      <div class="plaque-kicker">&#10022; Education &amp; Recognition &#10022;</div>
+      <div class="plaque-rule-lg"></div>
+      <div class="plaque-degree">B.E. Computer Engineering</div>
+      <div class="plaque-uni">Gujarat Technological University</div>
+      <div class="plaque-dates">October 2021 &mdash; June 2025 · GPA 8.4 / 10</div>
+      <div class="plaque-rule-sm"></div>
+      <div class="plaque-selected">&mdash; Selected for &mdash;</div>
+      <div class="plaque-award">Amazon ML Summer School <span class="serif-i accent">2024</span></div>
+    </div>
+  </section>
+
+  <!-- ── Footer ───────────────────────────────────────────────────────────── -->
+  <footer class="footer wrap-1100" id="contact">
+    <div class="footer-inner">
+      <div class="footer-row">
+        <div class="footer-cta">
+          Building something <span class="serif-i accent">in AI?</span>
+          <span style="color: var(--muted)">Let&rsquo;s compare notes.</span>
+        </div>
+        <div class="footer-socials">
+          <a class="footer-social" href="mailto:adshah15@outlook.in" aria-label="Email" title="Email">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="5" width="18" height="14" rx="2" />
+              <path d="M3 7l9 7 9-7" />
+            </svg>
+          </a>
+          <a class="footer-social" href="https://linkedin.com/in/aaryas" target="_blank" rel="noreferrer" aria-label="LinkedIn" title="LinkedIn">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M4.98 3.5a2.5 2.5 0 1 0 .02 5 2.5 2.5 0 0 0-.02-5zM3 9.5h4V21H3V9.5zM10 9.5h3.8v1.6h.06c.53-.96 1.83-1.96 3.77-1.96 4.04 0 4.79 2.55 4.79 5.87V21h-4v-5.2c0-1.24-.02-2.83-1.79-2.83-1.79 0-2.06 1.32-2.06 2.74V21h-4V9.5z" />
+            </svg>
+          </a>
+          <a class="footer-social" href="https://github.com/theaarya" target="_blank" rel="noreferrer" aria-label="GitHub" title="GitHub">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.1c-3.2.69-3.87-1.36-3.87-1.36-.52-1.32-1.28-1.67-1.28-1.67-1.04-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.04 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.8 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.58.23 2.75.11 3.04.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.4-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .3.21.66.79.55A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z" />
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-copy">Aarya Shah · 2026</div>
+    </div>
+  </footer>
+
+  <script>
+  (() => {
+    'use strict';
+
+    const esc = (s) => String(s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // ── The Living Stack — six layers, layer 03 is the orchestrator ───────
+    const LAYERS = [
+      {
+        n: '01', name: 'Interface', color: '#ffe6d8',
+        subtitle: 'The surface where humans meet the system.',
+        chips: ['React', 'Astro', 'Tailwind', 'TypeScript'],
+        shipped: [
+          { at: 'Tutero',   what: 'Product surfaces around internal AI features.' },
+          { at: 'VideoSDK', what: 'Developer hub site and the public AI-agents demo site.' },
+          { at: 'Personal', what: 'Web UIs for Gemma and Vox.' },
+        ],
+      },
+      {
+        n: '02', name: 'Voice & Realtime', color: '#fef0c2',
+        subtitle: 'WebRTC mics, telephony, streaming STT/TTS.',
+        chips: ['VideoSDK', 'LiveKit', 'SIP', 'Whisper', 'ElevenLabs'],
+        shipped: [
+          { at: 'VideoSDK', what: 'SIP integration, Twilio transfer, Azure OpenAI, STT/TTS providers, voice agents on AWS.' },
+          { at: 'VideoSDK', what: 'Namo turn detector — fine-tuned BERT (3.8k+ HF downloads).' },
+          { at: 'Personal', what: 'Vox — Whisper / Groq / ElevenLabs voicebot.' },
+        ],
+      },
+      {
+        n: '03', name: 'Agents & Orchestration', color: '#e2f0e3', center: true,
+        subtitle: 'Where the orchestration lives. I sit here.',
+        chips: ['LangGraph', 'n8n', 'Make', 'Custom loops', 'MCP'],
+        shipped: [
+          { at: 'Tutero',  what: 'LLM agents for churn, support, and recruitment.' },
+          { at: 'Siimteq', what: 'Diamond recommendation chatbot — fine-tuned LLM, regex, prompt engineering.' },
+        ],
+      },
+      {
+        n: '04', name: 'Models & RAG', color: '#dde7f7',
+        subtitle: 'Fine-tuning, embeddings, retrieval.',
+        chips: ['BERT', 'HF Transformers', 'Embeddings', 'FAISS', 'Qdrant'],
+        shipped: [
+          { at: 'VideoSDK', what: 'BERT fine-tuning for end-of-utterance detection.' },
+          { at: 'Siimteq',  what: 'Generative model for product imagery, CLIP image search.' },
+          { at: 'Personal', what: 'Gemma — vector + hybrid RAG over a diamond marketplace.' },
+        ],
+      },
+      {
+        n: '05', name: 'Automations & Integrations', color: '#f0e3f3',
+        subtitle: 'The unglamorous plumbing that keeps the lights on.',
+        chips: ['Stripe', 'Monday', 'Twilio', 'SendGrid', 'Slack', 'Make.com', 'n8n'],
+        shipped: [
+          { at: 'Tutero',   what: '50+ production automations across Stripe, Monday, Twilio, SendGrid and Firestore. 15+ hrs/week reclaimed.' },
+          { at: 'VideoSDK', what: 'Content syndication workflows on n8n + Docker — Reddit, X, LinkedIn via REST.' },
+        ],
+      },
+      {
+        n: '06', name: 'Data & Infra', color: '#f7e3e3',
+        subtitle: 'Where data lives and services run.',
+        chips: ['Postgres', 'Firestore', 'Snowflake', 'Cloudflare', 'AWS', 'Docker', 'Kubernetes'],
+        shipped: [
+          { at: 'Tutero',   what: 'Webhook + API architectures, Firestore data flows, observability tooling.' },
+          { at: 'VideoSDK', what: 'AWS deployments, Docker, content workflows.' },
+        ],
+      },
+    ];
+
+    let active = 2;      // layer 03 — Agents & Orchestration
+    let rolling = true;  // auto-roll until the user picks a layer
+
+    // ── Hero visual: layered fan ──────────────────────────────────────────
+    const fan = document.getElementById('fan');
+    fan.innerHTML = LAYERS.map((L, i) => `
+      <button class="fan-card" data-i="${i}" aria-label="${esc(L.name)}" aria-pressed="false"
+              style="background:${L.color}">
+        <span class="fan-layer">Layer ${L.n}</span>
+        <span class="fan-name">${esc(L.name)}</span>
+        <span class="fan-sub">${esc(L.subtitle)}</span>
+        <span class="fan-chips">
+          ${L.chips.slice(0, 4).map((c) => `<span class="fan-chip">${esc(c)}</span>`).join('')}
+        </span>
+      </button>
+    `).join('');
+    const fanCards = Array.from(fan.children);
+
+    function updateFan() {
+      fanCards.forEach((card, i) => {
+        const offset = i - active;
+        const isActive = i === active;
+        const abs = Math.abs(offset);
+        card.style.transform =
+          `translate(-50%, -50%) translateY(${offset * 42 - (isActive ? 4 : 0)}px) ` +
+          `translateX(${offset * 10}px) rotate(${offset * 1.1 - 0.5}deg) ` +
+          `scale(${isActive ? 1.03 : 1 - abs * 0.025})`;
+        card.style.zIndex = 11 - abs;
+        card.style.boxShadow = isActive
+          ? '0 26px 44px -10px rgba(60,40,20,0.25), inset 0 1px 0 rgba(255,255,255,0.6)'
+          : '0 6px 14px rgba(60,40,20,0.08), inset 0 1px 0 rgba(255,255,255,0.5)';
+        card.classList.toggle('is-active', isActive);
+        card.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      });
+    }
+
+    // ── Shipped panel — drawer that tracks the active layer ───────────────
+    const shippedBody = document.getElementById('shippedBody');
+    function renderShipped() {
+      const L = LAYERS[active];
+      shippedBody.innerHTML = `
+        <div class="shipped-head">
+          <div class="shipped-head-l">
+            <span class="shipped-kicker mono">Shipped at layer ${L.n}</span>
+            <span class="shipped-layer serif-i">${esc(L.name)}</span>
+          </div>
+          <span class="shipped-count mono">${L.shipped.length} items</span>
+        </div>
+        <div class="shipped-grid">
+          ${L.shipped.map((s) => `
+            <div class="shipped-row">
+              <span class="shipped-at serif">${esc(s.at)}</span>
+              <span class="shipped-what">${esc(s.what)}</span>
+            </div>`).join('')}
+        </div>`;
+    }
+
+    const shippedToggle = document.getElementById('shippedToggle');
+    const shippedToggleText = document.getElementById('shippedToggleText');
+    let shippedOpen = true;
+    shippedToggle.addEventListener('click', () => {
+      shippedOpen = !shippedOpen;
+      shippedBody.style.display = shippedOpen ? 'block' : 'none';
+      shippedToggleText.innerHTML = shippedOpen ? '— Hide what I shipped' : '+ Show what I shipped';
+      shippedToggle.setAttribute('aria-expanded', shippedOpen ? 'true' : 'false');
+    });
+
+    function setActive(i, byUser) {
+      active = i;
+      if (byUser) rolling = false;
+      updateFan();
+      renderShipped();
+    }
+
+    fan.addEventListener('click', (e) => {
+      const card = e.target.closest('.fan-card');
+      if (card) setActive(Number(card.dataset.i), true);
+    });
+
+    setActive(active, false);
+    if (!reduceMotion) {
+      setInterval(() => {
+        if (rolling) setActive((active + 1) % LAYERS.length, false);
+      }, 3200);
+    }
+
+    // ── Toolbox — workshop drawers ────────────────────────────────────────
+    const TOOLBOX = [
+      { n: '01', cat: 'Languages',              items: ['Python', 'TypeScript', 'JavaScript', 'Go', 'Dart / Flutter', 'Java', 'SQL', 'C / C++', 'Shell'] },
+      { n: '02', cat: 'Interface & Frontend',   items: ['React', 'Astro', 'Tailwind', 'Flutter', 'HTML / CSS', 'Vite', 'Next.js'] },
+      { n: '03', cat: 'AI / Models',            items: ['OpenAI', 'Anthropic', 'Groq', 'Hugging Face', 'TensorFlow', 'PyTorch', 'BERT', 'CLIP', 'Fine-tuning', 'Prompt eng.'] },
+      { n: '04', cat: 'Voice & Realtime',       items: ['VideoSDK', 'LiveKit', 'Whisper', 'ElevenLabs', 'SIP', 'Twilio', 'WebRTC', 'STT / TTS'] },
+      { n: '05', cat: 'Agents & Orchestration', items: ['LangGraph', 'MCP', 'Custom loops', 'OpenAI Functions', 'Tool-use patterns'] },
+      { n: '06', cat: 'RAG & Retrieval',        items: ['FAISS', 'Qdrant', 'Embeddings', 'SentenceTransformers', 'Hybrid search'] },
+      { n: '07', cat: 'Automation',             items: ['Make.com', 'n8n', 'Cloud Functions', 'Webhooks', 'GraphQL', 'REST'] },
+      { n: '08', cat: 'Payments & Comms',       items: ['Stripe', 'Twilio', 'SendGrid', 'Slack', 'Monday.com', 'Notion'] },
+      { n: '09', cat: 'Data & Storage',         items: ['Postgres', 'Firestore', 'Snowflake', 'Redis'] },
+      { n: '10', cat: 'Infra & DevOps',         items: ['AWS', 'Docker', 'Kubernetes', 'Cloudflare', 'GitHub Actions', 'Git'] },
+    ];
+
+    const tbCabinet = document.getElementById('tbCabinet');
+    tbCabinet.innerHTML = TOOLBOX.map((row, i) => `
+      <div class="tb-drawer${i === 0 ? ' is-open' : ''}" data-i="${i}">
+        <button class="tb-front" aria-expanded="${i === 0 ? 'true' : 'false'}">
+          <span class="tb-dnum">${row.n}</span>
+          <span class="tb-dcat">${esc(row.cat)}</span>
+          <span class="tb-dcount">${row.items.length}</span>
+          <span class="tb-handle" aria-hidden="true"></span>
+        </button>
+        <div class="tb-items">
+          ${row.items.map((it) => `<span class="tb-item">${esc(it)}</span>`).join('')}
+        </div>
+      </div>`).join('');
+
+    tbCabinet.addEventListener('click', (e) => {
+      const front = e.target.closest('.tb-front');
+      if (!front) return;
+      const drawer = front.closest('.tb-drawer');
+      tbCabinet.querySelectorAll('.tb-drawer').forEach((d) => {
+        d.classList.remove('is-open');
+        d.querySelector('.tb-front').setAttribute('aria-expanded', 'false');
+      });
+      drawer.classList.add('is-open');
+      front.setAttribute('aria-expanded', 'true');
+    });
+
+    // ── Career — accordion ────────────────────────────────────────────────
+    const CAREER = [
+      {
+        role: 'AI & Automation Engineer', org: 'Tutero',
+        date: 'Oct 2025 → Present', meta: 'Melbourne, AU · Remote · Full-time',
+        bullets: [
+          '50+ production automations across Make, n8n, Stripe, Monday, Twilio, SendGrid and Firestore — 15+ hrs/week reclaimed in manual ops.',
+          'LLM-powered AI agents for churn processing, customer support and recruitment.',
+          'Webhook + API architectures for real-time billing, CRM sync and cross-platform data orchestration.',
+          'Owned automation strategy and tooling decisions across the AI Solutions surface.',
+        ],
+        shipped: [],
+      },
+      {
+        role: 'AI Python Developer', org: 'VideoSDK',
+        date: 'May 2025 → Oct 2025', meta: 'Surat, IN · Internship',
+        bullets: [
+          'Built and fine-tuned BERT models for semantic end-of-utterance detection in voice agents.',
+          'Shipped to the AI Voice Agents framework: SIP integration, Twilio transfer, Azure OpenAI, STT/TTS/LLM providers, plugin architecture.',
+          'Production voice-agent deployments on AWS. Public demo site and developer documentation.',
+          'n8n + Docker content workflows on AWS — Reddit, X, LinkedIn syndication via REST.',
+        ],
+        shipped: [
+          {
+            name: 'Namo Turn Detector',
+            desc: 'Semantic turn detection so voice agents know when you’re actually done speaking. 3.8k+ Hugging Face downloads.',
+            links: [
+              ['PR',      'https://github.com/videosdk-live/agents/pull/72'],
+              ['Article', 'https://www.videosdk.live/blog/namo-turn-detection-v1-semantic-turn-detection-for-ai-voice-agents'],
+              ['HF',      'https://huggingface.co/videosdk-live/models'],
+            ],
+          },
+          {
+            name: 'VideoSDK AI Voice Agents',
+            desc: 'Contributions across the public agents framework — voice plugin architecture, SIP, providers, docs and the AI-apps demo site.',
+            links: [
+              ['Repo', 'https://github.com/videosdk-live/agents'],
+              ['Demo', 'https://www.videosdk.live/ai-apps'],
+              ['Docs', 'https://agents.videosdk.live/'],
+            ],
+          },
+        ],
+      },
+      {
+        role: 'AI Intern', org: 'Siimteq Technologies',
+        date: 'Feb 2025 → Apr 2025', meta: 'Vadodara, IN · Internship',
+        bullets: [
+          'Diamond recommendation chatbot — fine-tuned LLM, regex, prompt engineering.',
+          'Fine-tuned a generative model for product imagery and integrated OpenAI CLIP for image + natural-language search.',
+        ],
+        shipped: [],
+      },
+    ];
+
+    function shipStripHTML(shipped) {
+      if (!shipped.length) return '';
+      return `
+        <div class="shipstrip">
+          <div class="shipstrip-label">Shipped publicly</div>
+          <div class="shipstrip-list">
+            ${shipped.map((s) => `
+              <div class="shipstrip-item">
+                <div>
+                  <div class="shipstrip-name">${esc(s.name)}</div>
+                  <div class="shipstrip-desc">${esc(s.desc)}</div>
+                </div>
+                <div class="shipstrip-links">
+                  ${s.links.map(([label, href]) =>
+                    `<a href="${href}" target="_blank" rel="noreferrer">${esc(label)} &#8599;</a>`).join('')}
+                </div>
+              </div>`).join('')}
+          </div>
+        </div>`;
+    }
+
+    const accordion = document.getElementById('accordion');
+    accordion.innerHTML = CAREER.map((c, i) => `
+      <div class="acc-item${i === 0 ? ' is-open' : ''}" data-i="${i}">
+        <button class="acc-head" aria-expanded="${i === 0 ? 'true' : 'false'}">
+          <span class="acc-date mono">${esc(c.date)}</span>
+          <span><span class="acc-role">${esc(c.role)}</span><span class="acc-org">${esc(c.org)}</span></span>
+          <span class="acc-toggle mono">${i === 0 ? '−' : '+'}</span>
+        </button>
+        <div class="acc-panel">
+          <div class="acc-meta mono">${esc(c.meta)}</div>
+          <ul class="acc-bullets">
+            ${c.bullets.map((b) => `<li>${esc(b)}</li>`).join('')}
+          </ul>
+          ${shipStripHTML(c.shipped)}
+        </div>
+      </div>`).join('');
+
+    accordion.addEventListener('click', (e) => {
+      const head = e.target.closest('.acc-head');
+      if (!head) return;
+      const item = head.closest('.acc-item');
+      const wasOpen = item.classList.contains('is-open');
+      accordion.querySelectorAll('.acc-item').forEach((it) => {
+        it.classList.remove('is-open');
+        it.querySelector('.acc-head').setAttribute('aria-expanded', 'false');
+        it.querySelector('.acc-toggle').textContent = '+';
+      });
+      if (!wasOpen) {
+        item.classList.add('is-open');
+        head.setAttribute('aria-expanded', 'true');
+        item.querySelector('.acc-toggle').textContent = '−';
+      }
+    });
+
+    // ── Side nav — scrollspy, appears while scrolling ─────────────────────
+    const SIDE_NAV = [
+      { id: 'hero',         label: 'Intro' },
+      { id: 'capabilities', label: 'Capabilities' },
+      { id: 'toolbox',      label: 'Toolbox' },
+      { id: 'career',       label: 'Career' },
+      { id: 'education',    label: 'Education' },
+      { id: 'contact',      label: 'Contact' },
+    ];
+    const sidenav = document.getElementById('sidenav');
+    sidenav.innerHTML = SIDE_NAV.map((s) => `
+      <a href="#${s.id}" data-id="${s.id}">
+        <span class="sidenav-label">${esc(s.label)}</span>
+        <span class="sidenav-dot" aria-hidden="true"></span>
+      </a>`).join('');
+    const sideLinks = Array.from(sidenav.children);
+    const sideEls = SIDE_NAV.map((s) => document.getElementById(s.id)).filter(Boolean);
+
+    let scrolling = false, hovered = false, hideTimer;
+    const syncVisible = () => sidenav.classList.toggle('is-visible', scrolling || hovered);
+
+    function onScroll() {
+      const vh = window.innerHeight;
+      let current = SIDE_NAV[0].id;
+      sideEls.forEach((el) => {
+        if (el.getBoundingClientRect().top <= vh * 0.45) current = el.id;
+      });
+      sideLinks.forEach((a) => a.classList.toggle('is-on', a.dataset.id === current));
+      scrolling = true;
+      syncVisible();
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => { scrolling = false; syncVisible(); }, 1400);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    sidenav.addEventListener('mouseenter', () => { hovered = true; sidenav.classList.add('is-hovered'); syncVisible(); });
+    sidenav.addEventListener('mouseleave', () => { hovered = false; sidenav.classList.remove('is-hovered'); syncVisible(); });
+    onScroll();
+  })();
+  </script>
+</body>
+</html>
