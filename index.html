@@ -85,6 +85,23 @@
     }
     .sidenav a.is-on .sidenav-dot { width: 8px; height: 8px; background: var(--accent); }
 
+    /* ── Top progress bar (mobile) ───────────────────────────────────────── */
+    .topnav {
+      position: fixed; top: 0; left: 0; right: 0; height: 10px; z-index: 50;
+      display: none; pointer-events: none;
+      background: linear-gradient(180deg, rgba(21, 19, 13, 0.85), rgba(21, 19, 13, 0));
+    }
+    .topnav-bar   { position: absolute; top: 4px; left: 0; right: 0; height: 2px; background: var(--rule); }
+    .topnav-fill  { height: 100%; width: 0; background: var(--accent); transition: width 0.12s linear; }
+    .topnav-ticks { position: absolute; inset: 0; }
+    .topnav-tick {
+      position: absolute; top: 50%; transform: translate(-50%, -50%);
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--muted-2); pointer-events: auto;
+      transition: width 0.2s, height 0.2s, background 0.2s;
+    }
+    .topnav-tick.is-on { width: 9px; height: 9px; background: var(--accent); }
+
     /* ── Hero ────────────────────────────────────────────────────────────── */
     .hero {
       display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
@@ -115,7 +132,11 @@
     }
 
     /* ── Hero visual: layered fan ────────────────────────────────────────── */
-    .fan { position: relative; height: 460px; perspective: 1100px; }
+    .fan {
+      position: relative; overflow: hidden; max-width: 100%;
+      height: var(--fan-h); perspective: 1100px;
+      --fan-step-y: 42; --fan-step-x: 10; --fan-rot: 1.1; --fan-h: 460px;
+    }
     .fan-card {
       position: absolute; left: 50%; top: 50%;
       width: min(380px, 96%); height: 200px;
@@ -357,18 +378,29 @@
       .acc-head { grid-template-columns: 84px 1fr auto; gap: 14px; padding: 20px; }
       .acc-panel { padding: 4px 20px 24px; }
       .compass-item { padding: 16px 16px; }
+      .fan { --fan-step-y: 32; --fan-step-x: 6; --fan-rot: 0.8; --fan-h: 380px; }
+      .fan-card { width: min(340px, 92%); height: 180px; }
+      .fan-name { font-size: clamp(20px, 4.5vw, 24px); }
     }
     @media (max-width: 760px) {
       .sec-head { grid-template-columns: auto 1fr; gap: 14px 18px; }
       .sec-num { font-size: 44px; }
       .sec-blurb { grid-column: 1 / -1; text-align: left; max-width: none; }
     }
+    @media (max-width: 768px) {
+      .topnav  { display: block; }
+      .sidenav { display: none !important; }
+    }
     @media (max-width: 520px) {
-      .hero-stats { grid-template-columns: 1fr 1fr; }
       .shipstrip-item { grid-template-columns: 1fr; }
       .shipstrip-links { justify-content: flex-start; }
-      .compass { min-height: 440px; }
+      .compass { min-height: 380px; }
+      .compass-item { padding: 12px 12px; }
       .footer-row { align-items: flex-start; }
+      .footer-cta { width: 100%; }
+      .sidenav { right: 8px; padding: 10px 8px; }
+      .fan { --fan-step-y: 26; --fan-step-x: 3; --fan-rot: 0.55; --fan-h: 320px; }
+      .fan-card { height: 160px; padding: 18px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -382,28 +414,34 @@
   <!-- ── Side nav (scrollspy, built by script) ────────────────────────────── -->
   <nav class="sidenav" id="sidenav" aria-label="Sections"></nav>
 
+  <!-- ── Top progress bar (mobile alternative to side nav) ────────────────── -->
+  <div class="topnav" aria-hidden="true">
+    <div class="topnav-bar"><div class="topnav-fill" id="topnavFill"></div></div>
+    <div class="topnav-ticks" id="topnavTicks"></div>
+  </div>
+
   <!-- ── Hero ─────────────────────────────────────────────────────────────── -->
   <section class="hero wrap-1200" id="hero">
     <div>
       <div class="hero-hi">Hi, I&rsquo;m Aarya Shah.</div>
-      <h1>AI is mostly engineering. I build the <span class="serif-i accent">systems, automations and infrastructure</span> around the model.</h1>
+      <h1>Designing, building, and <span class="serif-i accent">keeping AI alive.</span></h1>
       <p class="hero-lede">
-        From voice models to webhook plumbing, I work across every layer between an AI idea
-        and a system that actually runs.
-        <span class="serif-i accent">Always glad to meet others building in this space.</span>
+        Six layers of stack, one orchestrator. I build voice agents, automations, RAG pipelines
+        and the integrations that hold them together.
+        <span class="serif-i accent">Open to interesting conversations.</span>
       </p>
       <div class="hero-stats">
         <div>
           <div class="stat-k">50+</div>
-          <div class="stat-v">automations shipped</div>
+          <div class="stat-v">AI automations</div>
         </div>
         <div>
-          <div class="stat-k">3.8k+</div>
-          <div class="stat-v">HF model downloads</div>
+          <div class="stat-k">6</div>
+          <div class="stat-v">layers covered</div>
         </div>
         <div>
           <div class="stat-k">3</div>
-          <div class="stat-v">companies, same playbook</div>
+          <div class="stat-v">companies</div>
         </div>
       </div>
     </div>
@@ -501,8 +539,7 @@
     <div class="footer-inner">
       <div class="footer-row">
         <div class="footer-cta">
-          Building something <span class="serif-i accent">in AI?</span>
-          <span style="color: var(--muted)">Let&rsquo;s compare notes.</span>
+          Working on something interesting? <span class="serif-i accent">Let&rsquo;s talk.</span>
         </div>
         <div class="footer-socials">
           <a class="footer-social" href="mailto:adshah15@outlook.in" aria-label="Email" title="Email">
@@ -553,7 +590,7 @@
         chips: ['VideoSDK', 'LiveKit', 'SIP', 'Whisper', 'ElevenLabs'],
         shipped: [
           { at: 'VideoSDK', what: 'SIP integration, Twilio transfer, Azure OpenAI, STT/TTS providers, voice agents on AWS.' },
-          { at: 'VideoSDK', what: 'Namo turn detector — fine-tuned BERT (3.8k+ HF downloads).' },
+          { at: 'VideoSDK', what: 'Namo turn detector — fine-tuned BERT for end-of-utterance detection.' },
           { at: 'Personal', what: 'Vox — Whisper / Groq / ElevenLabs voicebot.' },
         ],
       },
@@ -615,13 +652,17 @@
     const fanCards = Array.from(fan.children);
 
     function updateFan() {
+      const cs = getComputedStyle(fan);
+      const stepY = parseFloat(cs.getPropertyValue('--fan-step-y')) || 42;
+      const stepX = parseFloat(cs.getPropertyValue('--fan-step-x')) || 10;
+      const rot   = parseFloat(cs.getPropertyValue('--fan-rot'))    || 1.1;
       fanCards.forEach((card, i) => {
         const offset = i - active;
         const isActive = i === active;
         const abs = Math.abs(offset);
         card.style.transform =
-          `translate(-50%, -50%) translateY(${offset * 42 - (isActive ? 4 : 0)}px) ` +
-          `translateX(${offset * 10}px) rotate(${offset * 1.1 - 0.5}deg) ` +
+          `translate(-50%, -50%) translateY(${offset * stepY - (isActive ? 4 : 0)}px) ` +
+          `translateX(${offset * stepX}px) rotate(${offset * rot - 0.5}deg) ` +
           `scale(${isActive ? 1.03 : 1 - abs * 0.025})`;
         card.style.zIndex = 11 - abs;
         card.style.boxShadow = isActive
@@ -676,6 +717,7 @@
     });
 
     setActive(active, false);
+    window.addEventListener('resize', updateFan, { passive: true });
     if (!reduceMotion) {
       setInterval(() => {
         if (rolling) setActive((active + 1) % LAYERS.length, false);
@@ -747,7 +789,7 @@
         shipped: [
           {
             name: 'Namo Turn Detector',
-            desc: 'Semantic turn detection so voice agents know when you’re actually done speaking. 3.8k+ Hugging Face downloads.',
+            desc: 'Semantic turn detection so voice agents know when you’re actually done speaking.',
             links: [
               ['PR',      'https://github.com/videosdk-live/agents/pull/72'],
               ['Article', 'https://www.videosdk.live/blog/namo-turn-detection-v1-semantic-turn-detection-for-ai-voice-agents'],
@@ -868,6 +910,42 @@
     sidenav.addEventListener('mouseenter', () => { hovered = true; sidenav.classList.add('is-hovered'); syncVisible(); });
     sidenav.addEventListener('mouseleave', () => { hovered = false; sidenav.classList.remove('is-hovered'); syncVisible(); });
     onScroll();
+
+    // ── Top progress bar — mobile alternative to .sidenav ─────────────────
+    const topnavFill  = document.getElementById('topnavFill');
+    const topnavTicks = document.getElementById('topnavTicks');
+
+    function layoutTopnav() {
+      const docH = document.documentElement.scrollHeight - window.innerHeight;
+      topnavTicks.innerHTML = SIDE_NAV.map((s) => {
+        const el = document.getElementById(s.id);
+        if (!el) return '';
+        const pct = docH > 0 ? Math.min(100, Math.max(0, (el.offsetTop / docH) * 100)) : 0;
+        return `<a class="topnav-tick" href="#${s.id}" data-id="${s.id}" ` +
+               `style="left:${pct}%" aria-label="${esc(s.label)}"></a>`;
+      }).join('');
+    }
+
+    function updateTopnav() {
+      const docH = document.documentElement.scrollHeight - window.innerHeight;
+      topnavFill.style.width = (docH > 0 ? (window.scrollY / docH) * 100 : 0) + '%';
+      const vh = window.innerHeight;
+      let current = SIDE_NAV[0].id;
+      sideEls.forEach((el) => {
+        if (el.getBoundingClientRect().top <= vh * 0.45) current = el.id;
+      });
+      topnavTicks.querySelectorAll('.topnav-tick').forEach((a) => {
+        a.classList.toggle('is-on', a.dataset.id === current);
+      });
+    }
+
+    layoutTopnav();
+    updateTopnav();
+    window.addEventListener('scroll', updateTopnav, { passive: true });
+    window.addEventListener('resize', () => { layoutTopnav(); updateTopnav(); }, { passive: true });
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => { layoutTopnav(); updateTopnav(); });
+    }
   })();
   </script>
 </body>
