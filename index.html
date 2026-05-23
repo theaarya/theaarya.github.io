@@ -229,7 +229,15 @@
       width: 56px; height: 56px; border-radius: 50%; background: var(--accent);
       display: grid; place-items: center;
       font-family: var(--serif); font-style: italic; font-size: 28px; color: #fff;
+      border: none; padding: 0; cursor: pointer;
+      pointer-events: auto;
+      transition: transform 0.15s, box-shadow 0.15s;
     }
+    .compass-hub:hover  { transform: translate(-50%, -50%) scale(1.06); box-shadow: 0 0 0 6px var(--accent-soft); }
+    .compass-hub:active { transform: translate(-50%, -50%) scale(0.96); }
+    .compass.is-collapsed .compass-desc { display: none; }
+    .compass.is-collapsed .compass-name { margin-bottom: 0; }
+    .compass.is-collapsed { min-height: 320px; }
     .compass-item { padding: 24px 36px; }
     .compass-item.ci0 { text-align: right; align-self: end; }
     .compass-item.ci1 { text-align: left;  align-self: end; }
@@ -390,6 +398,14 @@
     @media (max-width: 768px) {
       .topnav  { display: block; }
       .sidenav { display: none !important; }
+      .compass { min-height: 420px; }
+      .compass-item.ci0 { text-align: left;  align-self: start; }
+      .compass-item.ci1 { text-align: right; align-self: start; }
+      .compass-item.ci2 { text-align: left;  align-self: end;   }
+      .compass-item.ci3 { text-align: right; align-self: end;   }
+      .compass-hub  { width: 44px; height: 44px; font-size: 22px; }
+      .compass-name { font-size: clamp(17px, 4.2vw, 22px); }
+      .compass-desc { font-size: 12.5px; }
     }
     @media (max-width: 520px) {
       .shipstrip-item { grid-template-columns: 1fr; }
@@ -473,7 +489,7 @@
       <div class="compass-cross" aria-hidden="true">
         <div class="compass-vline"></div>
         <div class="compass-hline"></div>
-        <div class="compass-hub">+</div>
+        <button class="compass-hub" id="compassHub" type="button" aria-label="Toggle capability descriptions" aria-expanded="true">−</button>
       </div>
       <div class="compass-item ci0">
         <div class="compass-num">01</div>
@@ -755,14 +771,28 @@
     tbCabinet.addEventListener('click', (e) => {
       const front = e.target.closest('.tb-front');
       if (!front) return;
-      const drawer = front.closest('.tb-drawer');
+      const drawer  = front.closest('.tb-drawer');
+      const wasOpen = drawer.classList.contains('is-open');
       tbCabinet.querySelectorAll('.tb-drawer').forEach((d) => {
         d.classList.remove('is-open');
         d.querySelector('.tb-front').setAttribute('aria-expanded', 'false');
       });
-      drawer.classList.add('is-open');
-      front.setAttribute('aria-expanded', 'true');
+      if (!wasOpen) {
+        drawer.classList.add('is-open');
+        front.setAttribute('aria-expanded', 'true');
+      }
     });
+
+    // ── Compass + button toggles descriptions ─────────────────────────────
+    const compassEl  = document.querySelector('.compass');
+    const compassHub = document.getElementById('compassHub');
+    if (compassHub && compassEl) {
+      compassHub.addEventListener('click', () => {
+        const collapsed = compassEl.classList.toggle('is-collapsed');
+        compassHub.textContent = collapsed ? '+' : '−';
+        compassHub.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+      });
+    }
 
     // ── Career — accordion ────────────────────────────────────────────────
     const CAREER = [
