@@ -6,6 +6,14 @@
   <title>Aarya Shah</title>
   <link rel="icon" type="image/png" href="https://github.com/theaarya.png?size=64" />
   <meta name="description" content="Aarya Shah — I build the systems, automations and infrastructure around AI models. Six layers, one stack." />
+  <meta property="og:title"        content="Aarya Shah" />
+  <meta property="og:description"  content="AI & automation engineer. Six layers of stack, one orchestrator." />
+  <meta property="og:image"        content="https://github.com/theaarya.png?size=600" />
+  <meta property="og:type"         content="website" />
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="Aarya Shah" />
+  <meta name="twitter:description" content="AI & automation engineer. Six layers of stack, one orchestrator." />
+  <meta name="twitter:image"       content="https://github.com/theaarya.png?size=600" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -45,6 +53,7 @@
       font-family: var(--sans);
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
+      text-wrap: pretty;
     }
     section, footer { scroll-margin-top: 20px; }
 
@@ -52,6 +61,7 @@
     .serif-i { font-family: var(--serif); font-style: italic; font-weight: 400; }
     .mono    { font-family: var(--mono); font-feature-settings: 'ss01' 1, 'zero' 1; }
     .accent  { color: var(--accent); }
+    .nowrap  { white-space: nowrap; }
 
     a { color: inherit; }
 
@@ -177,6 +187,7 @@
     .shipped-body {
       margin-top: 12px; padding: 22px 26px;
       background: var(--paper); border: 1px solid var(--rule); border-radius: 16px;
+      min-height: 240px;
     }
     .shipped-head {
       display: flex; align-items: baseline; justify-content: space-between;
@@ -236,7 +247,7 @@
     }
     .compass-hub:hover  { transform: translate(-50%, -50%) scale(1.06); box-shadow: 0 0 0 6px var(--accent-soft); }
     .compass-hub:active { transform: translate(-50%, -50%) scale(0.96); }
-    .compass.is-collapsed .compass-desc { display: none; }
+    .compass.is-collapsed .compass-desc { max-height: 0; opacity: 0; margin-top: 0; }
     .compass.is-collapsed .compass-name { margin-bottom: 0; }
     .compass.is-collapsed { min-height: 320px; }
     .compass-item { padding: 24px 36px; }
@@ -246,7 +257,11 @@
     .compass-item.ci3 { text-align: left;  align-self: start; }
     .compass-num { font-family: var(--serif); font-style: italic; font-size: 28px; color: var(--accent); line-height: 1; margin-bottom: 6px; }
     .compass-name { font-family: var(--serif); font-size: clamp(20px, 2.4vw, 28px); letter-spacing: -0.015em; line-height: 1.1; }
-    .compass-desc { font-size: 13.5px; line-height: 1.55; color: var(--ink-2); margin-top: 8px; }
+    .compass-desc {
+      font-size: 13.5px; line-height: 1.55; color: var(--ink-2); margin-top: 8px;
+      max-height: 200px; opacity: 1; overflow: hidden;
+      transition: max-height 0.3s ease, opacity 0.2s ease, margin-top 0.3s ease;
+    }
 
     /* ── Toolbox (workshop drawers) ──────────────────────────────────────── */
     .toolbox { padding: 0 var(--pad) 96px; }
@@ -271,8 +286,12 @@
     .tb-dcat { font-family: var(--mono); font-size: 11px; color: var(--ink); text-transform: uppercase; letter-spacing: 0.1em; }
     .tb-drawer.is-open .tb-dcat { color: var(--accent); }
     .tb-dcount { font-family: var(--mono); font-size: 10px; color: var(--muted); }
-    .tb-handle { width: 24px; height: 4px; background: var(--ink); border-radius: 2px; justify-self: end; opacity: 0.7; transition: background 0.15s, opacity 0.15s; }
-    .tb-drawer.is-open .tb-handle { background: var(--accent); opacity: 1; }
+    .tb-toggle {
+      font-family: var(--mono); font-size: 18px; color: var(--muted);
+      justify-self: end; width: 24px; text-align: center;
+      transition: color 0.15s;
+    }
+    .tb-drawer.is-open .tb-toggle { color: var(--accent); }
     .tb-items { display: none; padding: 12px 16px 4px; flex-wrap: wrap; gap: 5px; }
     .tb-drawer.is-open .tb-items { display: flex; }
     .tb-item {
@@ -293,7 +312,7 @@
     .acc-item { border-bottom: 1px solid var(--rule-soft); }
     .acc-item:last-child { border-bottom: none; }
     .acc-head {
-      width: 100%; display: grid; grid-template-columns: 110px 1fr auto;
+      width: 100%; display: grid; grid-template-columns: 140px 1fr auto;
       gap: 20px; align-items: center; padding: 22px 28px;
       background: transparent; border: none; cursor: pointer;
       text-align: left; font-family: inherit; color: var(--ink);
@@ -308,7 +327,7 @@
     .acc-org { font-family: var(--serif); font-style: italic; font-size: 16px; color: var(--accent); margin-left: 10px; }
     .acc-toggle { font-size: 18px; color: var(--muted); }
     .acc-item.is-open .acc-toggle { color: var(--accent); }
-    .acc-panel { display: none; padding: 4px 32px 28px 138px; }
+    .acc-panel { display: none; padding: 4px 32px 28px 168px; }
     .acc-item.is-open .acc-panel { display: block; }
     .acc-meta {
       font-size: 11px; color: var(--muted);
@@ -384,12 +403,13 @@
     @media (max-width: 880px) {
       :root { --pad: 24px; }
       .hero { grid-template-columns: 1fr; gap: 28px; padding-top: 44px; padding-bottom: 56px; }
-      .acc-head { grid-template-columns: 84px 1fr auto; gap: 14px; padding: 20px; }
+      .acc-head { grid-template-columns: 100px 1fr auto; gap: 14px; padding: 20px; }
       .acc-panel { padding: 4px 20px 24px; }
       .compass-item { padding: 16px 16px; }
-      .fan { --fan-step-y: 32; --fan-step-x: 6; --fan-rot: 0.8; --fan-h: 380px; }
-      .fan-card { width: min(340px, 92%); height: 180px; }
+      .fan { --fan-step-y: 32; --fan-step-x: 6; --fan-rot: 0.8; --fan-h: 420px; }
+      .fan-card { width: min(340px, 92%); height: 200px; }
       .fan-name { font-size: clamp(20px, 4.5vw, 24px); }
+      .shipped-body { min-height: 320px; }
     }
     @media (max-width: 760px) {
       .sec-head { grid-template-columns: auto 1fr; gap: 14px 18px; }
@@ -416,8 +436,8 @@
       .footer-row { align-items: flex-start; }
       .footer-cta { width: 100%; }
       .sidenav { right: 8px; padding: 10px 8px; }
-      .fan { --fan-step-y: 26; --fan-step-x: 3; --fan-rot: 0.55; --fan-h: 320px; }
-      .fan-card { height: 160px; padding: 18px; }
+      .fan { --fan-step-y: 26; --fan-step-x: 3; --fan-rot: 0.55; --fan-h: 360px; }
+      .fan-card { height: 180px; padding: 18px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -544,7 +564,7 @@
       <div class="plaque-rule-lg"></div>
       <div class="plaque-degree">B.E. Computer Engineering</div>
       <div class="plaque-uni">Gujarat Technological University</div>
-      <div class="plaque-dates">October 2021 &mdash; June 2025 · GPA 8.4 / 10</div>
+      <div class="plaque-dates">October 2021 &mdash; June 2025 · <span class="nowrap">GPA 8.4 / 10</span></div>
       <div class="plaque-rule-sm"></div>
       <div class="plaque-selected">&mdash; Selected for &mdash;</div>
       <div class="plaque-award">Amazon ML Summer School <span class="serif-i accent">2024</span></div>
@@ -767,7 +787,7 @@
         <button class="tb-front" aria-expanded="${i === 0 ? 'true' : 'false'}">
           <span class="tb-dcat">${esc(row.cat)}</span>
           <span class="tb-dcount">${row.items.length}</span>
-          <span class="tb-handle" aria-hidden="true"></span>
+          <span class="tb-toggle" aria-hidden="true">${i === 0 ? '−' : '+'}</span>
         </button>
         <div class="tb-items">
           ${row.items.map((it) => `<span class="tb-item">${esc(it)}</span>`).join('')}
@@ -787,6 +807,10 @@
         drawer.classList.add('is-open');
         front.setAttribute('aria-expanded', 'true');
       }
+      tbCabinet.querySelectorAll('.tb-drawer').forEach((d) => {
+        d.querySelector('.tb-toggle').textContent =
+          d.classList.contains('is-open') ? '−' : '+';
+      });
     });
 
     // ── Compass + button toggles descriptions ─────────────────────────────
