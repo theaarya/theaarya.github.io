@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Not found · Aarya Shah</title>
+  <link rel="icon" type="image/png" href="https://github.com/theaarya.png?size=64" />
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" id="themeColor" content="#f6f1e7" />
+  <script>
+    // Apply a saved theme choice before first paint so there is no flash.
+    (function () {
+      try {
+        var t = localStorage.getItem('theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <script>
+    // Recover common QR and typing slips before the page paints:
+    // a trailing slash, an .html suffix, or a capital letter in a known path.
+    (function () {
+      var known = ['/', '/contact', '/in-the-loop'];
+      var p = location.pathname.replace(/\/+$/, '').replace(/\.html$/, '').toLowerCase() || '/';
+      if (p !== location.pathname && known.indexOf(p) !== -1) {
+        location.replace(p + location.search + location.hash);
+      }
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" />
+
+  <style>
+    /* ── Design tokens. Light by default; dark follows the device, or the toggle. ── */
+    :root {
+      color-scheme: light;
+      --cream: #f6f1e7;
+      --cream-2: #efe9dc;
+      --cream-3: #e6dfcf;
+      --paper: #fffdf8;
+      --ink: #17150f;
+      --ink-2: #3d3930;
+      --muted: #6f6a5e;
+      --muted-2: #9a9485;
+      --rule: #d8d1c0;
+      --rule-soft: #e6e0d2;
+      --accent: #6d3fd6;
+      --accent-soft: rgba(109, 63, 214, 0.14);
+
+      --serif: 'Instrument Serif', ui-serif, Georgia, serif;
+      --sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'Segoe UI', sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --cream: #15130d;
+      --cream-2: #1c1916;
+      --cream-3: #2a261f;
+      --paper: #1c1916;
+      --ink: #f0ece2;
+      --ink-2: #d2cdc0;
+      --muted: #9a9485;
+      --muted-2: #6e695d;
+      --rule: #3a3528;
+      --rule-soft: #2a261f;
+      --accent: #8b5cf6;
+      --accent-soft: rgba(139, 92, 246, 0.22);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --cream: #15130d;
+      --cream-2: #1c1916;
+      --cream-3: #2a261f;
+      --paper: #1c1916;
+      --ink: #f0ece2;
+      --ink-2: #d2cdc0;
+      --muted: #9a9485;
+      --muted-2: #6e695d;
+      --rule: #3a3528;
+      --rule-soft: #2a261f;
+      --accent: #8b5cf6;
+      --accent-soft: rgba(139, 92, 246, 0.22);
+      }
+    }
+
+    /* ── Theme toggle ────────────────────────────────────────────────────── */
+    .theme-toggle {
+      position: fixed; top: 14px; right: 14px; z-index: 60;
+      width: 36px; height: 36px; border-radius: 50%; padding: 0;
+      display: grid; place-items: center; cursor: pointer;
+      background: var(--paper); color: var(--muted); border: 1px solid var(--rule);
+      transition: color 0.2s, border-color 0.2s, transform 0.2s;
+    }
+    .theme-toggle:hover { color: var(--accent); border-color: var(--accent); transform: translateY(-1px); }
+    .theme-toggle svg { width: 16px; height: 16px; display: none; }
+    .theme-toggle .i-moon { display: block; }
+    :root[data-theme="dark"] .theme-toggle .i-sun { display: block; }
+    :root[data-theme="dark"] .theme-toggle .i-moon { display: none; }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .theme-toggle .i-sun { display: block; }
+      :root:not([data-theme="light"]) .theme-toggle .i-moon { display: none; }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      padding: 48px 24px; background: var(--cream);
+      background-image: radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.12), transparent 62%);
+      color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; text-wrap: pretty;
+    }
+    .card { width: 100%; max-width: 520px; text-align: center; }
+    .num { font-family: var(--serif); font-style: italic; font-size: clamp(64px, 14vw, 120px); line-height: 0.9; color: var(--accent); letter-spacing: -0.03em; }
+    h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(26px, 4.5vw, 38px); margin: 18px 0 0; letter-spacing: -0.02em; line-height: 1.1; }
+    p { margin: 14px auto 0; max-width: 400px; font-size: 15px; line-height: 1.55; color: var(--ink-2); }
+    .links { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 28px; }
+    .links a {
+      display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 999px;
+      border: 1px solid var(--rule); background: var(--paper); color: var(--ink-2); text-decoration: none;
+      font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase;
+      transition: border-color 0.2s, color 0.2s, transform 0.2s;
+    }
+    .links a:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+    .links a.primary { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+    .copy { margin-top: 36px; font-family: var(--mono); font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; }
+    @media (prefers-reduced-motion: reduce) { .links a, .theme-toggle { transition: none; } }
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch between light and dark theme" title="Switch theme">
+    <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
+    <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" /></svg>
+  </button>
+  <main class="card">
+    <div class="num">404</div>
+    <h1>That page is not here. <span style="font-style: italic; color: var(--accent)">The rest of me is.</span></h1>
+    <p>The link may have a typo, or the page moved. Pick a door.</p>
+    <div class="links">
+      <a class="primary" href="/">Home &rarr;</a>
+      <a href="/in-the-loop">In the Loop</a>
+      <a href="/contact">Contact</a>
+    </div>
+    <div class="copy">Aarya Shah · 2026</div>
+  </main>
+
+  <script>
+  (() => {
+    'use strict';
+    // ── Theme toggle. Follows the device until the visitor picks; picking the
+    //    device's own preference clears the override so the site follows it again.
+    const themeToggle = document.getElementById('themeToggle');
+    const themeColor  = document.getElementById('themeColor');
+    const systemDark  = window.matchMedia('(prefers-color-scheme: dark)');
+    const isDark = () => {
+      const t = document.documentElement.getAttribute('data-theme');
+      return t ? t === 'dark' : systemDark.matches;
+    };
+    const syncThemeColor = () => { if (themeColor) themeColor.content = isDark() ? '#15130d' : '#f6f1e7'; };
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        const next = isDark() ? 'light' : 'dark';
+        try {
+          if ((next === 'dark') === systemDark.matches) {
+            document.documentElement.removeAttribute('data-theme');
+            localStorage.removeItem('theme');
+          } else {
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+          }
+        } catch (e) { document.documentElement.setAttribute('data-theme', next); }
+        syncThemeColor();
+      });
+    }
+    systemDark.addEventListener('change', syncThemeColor);
+    syncThemeColor();
+  })();
+  </script>
+</body>
+</html>
