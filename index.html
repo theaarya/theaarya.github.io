@@ -14,14 +14,62 @@
   <meta name="twitter:title"       content="Aarya Shah" />
   <meta name="twitter:description" content="AI & automation engineer. Six layers of stack, one orchestrator." />
   <meta name="twitter:image"       content="https://github.com/theaarya.png?size=600" />
+  <meta property="og:url"          content="https://theaarya.github.io/" />
+  <link rel="canonical" href="https://theaarya.github.io/" />
+  <meta name="theme-color" id="themeColor" content="#f6f1e7" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Aarya Shah",
+    "url": "https://theaarya.github.io/",
+    "image": "https://github.com/theaarya.png?size=600",
+    "jobTitle": "AI & Automation Engineer",
+    "worksFor": { "@type": "Organization", "name": "Tutero" },
+    "alumniOf": { "@type": "CollegeOrUniversity", "name": "Gujarat Technological University" },
+    "email": "mailto:adshah15@outlook.in",
+    "sameAs": ["https://linkedin.com/in/aaryas", "https://github.com/theaarya"]
+  }
+  </script>
+  <script>
+    // Apply a saved theme choice before first paint so there is no flash.
+    (function () {
+      try {
+        var t = localStorage.getItem('theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" />
 
   <style>
-    /* ── Design tokens — dark mode, iris accent ─────────────────────────── */
+    /* ── Design tokens. Light by default; dark follows the device, or the toggle. ── */
     :root {
+      color-scheme: light;
+      --cream: #f6f1e7;
+      --cream-2: #efe9dc;
+      --cream-3: #e6dfcf;
+      --paper: #fffdf8;
+      --ink: #17150f;
+      --ink-2: #3d3930;
+      --muted: #6f6a5e;
+      --muted-2: #9a9485;
+      --rule: #d8d1c0;
+      --rule-soft: #e6e0d2;
+      --accent: #6d3fd6;
+      --accent-soft: rgba(109, 63, 214, 0.14);
+
+      --serif: 'Instrument Serif', ui-serif, Georgia, serif;
+      --sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'Segoe UI', sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+      --pad: 48px;
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
       --cream: #15130d;
       --cream-2: #1c1916;
       --cream-3: #2a261f;
@@ -32,15 +80,43 @@
       --muted-2: #6e695d;
       --rule: #3a3528;
       --rule-soft: #2a261f;
-
       --accent: #8b5cf6;
       --accent-soft: rgba(139, 92, 246, 0.22);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --cream: #15130d;
+      --cream-2: #1c1916;
+      --cream-3: #2a261f;
+      --paper: #1c1916;
+      --ink: #f0ece2;
+      --ink-2: #d2cdc0;
+      --muted: #9a9485;
+      --muted-2: #6e695d;
+      --rule: #3a3528;
+      --rule-soft: #2a261f;
+      --accent: #8b5cf6;
+      --accent-soft: rgba(139, 92, 246, 0.22);
+      }
+    }
 
-      --serif: 'Instrument Serif', ui-serif, Georgia, serif;
-      --sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'Segoe UI', sans-serif;
-      --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-
-      --pad: 48px;
+    /* ── Theme toggle ────────────────────────────────────────────────────── */
+    .theme-toggle {
+      position: fixed; top: 14px; right: 14px; z-index: 60;
+      width: 36px; height: 36px; border-radius: 50%; padding: 0;
+      display: grid; place-items: center; cursor: pointer;
+      background: var(--paper); color: var(--muted); border: 1px solid var(--rule);
+      transition: color 0.2s, border-color 0.2s, transform 0.2s;
+    }
+    .theme-toggle:hover { color: var(--accent); border-color: var(--accent); transform: translateY(-1px); }
+    .theme-toggle svg { width: 16px; height: 16px; display: none; }
+    .theme-toggle .i-moon { display: block; }
+    :root[data-theme="dark"] .theme-toggle .i-sun { display: block; }
+    :root[data-theme="dark"] .theme-toggle .i-moon { display: none; }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .theme-toggle .i-sun { display: block; }
+      :root:not([data-theme="light"]) .theme-toggle .i-moon { display: none; }
     }
 
     * { box-sizing: border-box; }
@@ -100,7 +176,7 @@
     .topnav {
       position: fixed; top: 0; left: 0; right: 0; height: 10px; z-index: 50;
       display: none; pointer-events: none;
-      background: linear-gradient(180deg, rgba(21, 19, 13, 0.85), rgba(21, 19, 13, 0));
+      background: linear-gradient(180deg, color-mix(in srgb, var(--cream) 85%, transparent), transparent);
     }
     .topnav-bar   { position: absolute; top: 4px; left: 0; right: 0; height: 2px; background: var(--rule); }
     .topnav-fill  { height: 100%; width: 0; background: var(--accent); transition: width 0.12s linear; }
@@ -187,7 +263,7 @@
     .shipped-body {
       margin-top: 12px; padding: 22px 26px;
       background: var(--paper); border: 1px solid var(--rule); border-radius: 16px;
-      min-height: 240px;
+      overflow: hidden; transition: height 0.35s ease;
     }
     .shipped-head {
       display: flex; align-items: baseline; justify-content: space-between;
@@ -394,6 +470,11 @@
       text-decoration: none; transition: color 0.2s, border-color 0.2s, transform 0.2s;
     }
     .footer-social:hover { color: var(--accent); border-color: var(--accent); transform: translateY(-2px); }
+    .footer-more {
+      display: inline-block; margin-top: 18px; text-decoration: none;
+      font-family: var(--mono); font-size: 10.5px; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 0.1em;
+    }
     .footer-copy {
       margin-top: 28px; font-family: var(--mono); font-size: 10.5px; color: var(--muted);
       text-align: center; text-transform: uppercase; letter-spacing: 0.12em;
@@ -409,7 +490,6 @@
       .fan { --fan-step-y: 32; --fan-step-x: 6; --fan-rot: 0.8; --fan-h: 420px; }
       .fan-card { width: min(340px, 92%); height: 200px; }
       .fan-name { font-size: clamp(20px, 4.5vw, 24px); }
-      .shipped-body { min-height: 320px; }
     }
     @media (max-width: 760px) {
       .sec-head { grid-template-columns: auto 1fr; gap: 14px 18px; }
@@ -442,20 +522,25 @@
 
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
-      .fan-card { transition: none; }
+      .fan-card, .shipped-body, .theme-toggle { transition: none; }
     }
   </style>
 </head>
 <body>
 
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch between light and dark theme" title="Switch theme">
+    <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
+    <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" /></svg>
+  </button>
+
   <!-- ── Side nav (scrollspy, built by script) ────────────────────────────── -->
   <nav class="sidenav" id="sidenav" aria-label="Sections"></nav>
 
   <!-- ── Top progress bar (mobile alternative to side nav) ────────────────── -->
-  <div class="topnav" aria-hidden="true">
-    <div class="topnav-bar"><div class="topnav-fill" id="topnavFill"></div></div>
+  <nav class="topnav" aria-label="Page progress">
+    <div class="topnav-bar" aria-hidden="true"><div class="topnav-fill" id="topnavFill"></div></div>
     <div class="topnav-ticks" id="topnavTicks"></div>
-  </div>
+  </nav>
 
   <!-- ── Hero ─────────────────────────────────────────────────────────────── -->
   <section class="hero wrap-1200" id="hero">
@@ -597,6 +682,7 @@
           </a>
         </div>
       </div>
+      <a class="footer-more" href="/contact">Every way to reach me &rarr;</a>
       <div class="footer-copy">Aarya Shah · 2026</div>
     </div>
   </footer>
@@ -616,7 +702,7 @@
         subtitle: 'The surface where humans meet the system.',
         chips: ['React', 'Astro', 'Tailwind', 'TypeScript'],
         shipped: [
-          { at: 'Tutero',   what: 'Product surfaces around internal AI features.' },
+          { at: 'Tutero',   what: 'Internal forms platform that replaced Typeform, plus product surfaces around internal AI features.' },
           { at: 'VideoSDK', what: 'Developer hub site and the public AI-agents demo site.' },
         ],
       },
@@ -635,7 +721,8 @@
         subtitle: 'Where the orchestration lives. I sit here.',
         chips: ['LangGraph', 'n8n', 'Make', 'Custom loops', 'MCP'],
         shipped: [
-          { at: 'Tutero',  what: 'LLM agents for churn, support, and recruitment.' },
+          { at: 'Tutero',  what: 'LLM agents with human approval flows for support and recruitment. Churn stayed deterministic on purpose.' },
+          { at: 'Tutero',  what: 'Direction for the internal agent platform: MCP integrations, Langfuse tracing, tool level toggles, least privilege access.' },
           { at: 'Siimteq', what: 'Diamond recommendation chatbot — fine-tuned LLM, regex, prompt engineering.' },
         ],
       },
@@ -716,7 +803,7 @@
     const shippedBody = document.getElementById('shippedBody');
     function renderShipped() {
       const L = LAYERS[active];
-      shippedBody.innerHTML = `
+      const html = `
         <div class="shipped-head">
           <div class="shipped-head-l">
             <span class="shipped-kicker mono">Shipped at layer ${L.n}</span>
@@ -731,6 +818,21 @@
               <span class="shipped-what">${esc(s.what)}</span>
             </div>`).join('')}
         </div>`;
+      // Size the drawer to its content, easing between layer heights instead of jumping.
+      if (reduceMotion || !shippedOpen || !shippedBody.innerHTML) { shippedBody.innerHTML = html; return; }
+      const from = shippedBody.offsetHeight;
+      shippedBody.innerHTML = html;
+      shippedBody.style.height = 'auto';
+      const to = shippedBody.offsetHeight;
+      if (to === from) { shippedBody.style.height = ''; return; }
+      shippedBody.style.height = from + 'px';
+      void shippedBody.offsetHeight;
+      shippedBody.style.height = to + 'px';
+      shippedBody.addEventListener('transitionend', function settle(e) {
+        if (e.propertyName !== 'height') return;
+        shippedBody.style.height = '';
+        shippedBody.removeEventListener('transitionend', settle);
+      });
     }
 
     const shippedToggle = document.getElementById('shippedToggle');
@@ -763,7 +865,7 @@
     window.addEventListener('resize', updateFan, { passive: true });
     if (!reduceMotion) {
       setInterval(() => {
-        if (rolling) setActive((active + 1) % LAYERS.length, false);
+        if (rolling && !document.hidden) setActive((active + 1) % LAYERS.length, false);
       }, ROLL_INTERVAL_MS);
     }
 
@@ -831,7 +933,9 @@
         date: 'Oct 2025 → Present', meta: 'Melbourne, AU · Remote · Full-time',
         bullets: [
           '50+ production automations across Make, n8n, Stripe, Monday, Twilio, SendGrid and Firestore — 15+ hrs/week reclaimed in manual ops.',
-          'LLM-powered AI agents for churn processing, customer support and recruitment.',
+          'LLM agents with human approval flows for customer support and recruitment. Churn was built as a deterministic rules engine instead, because it never needed an agent.',
+          'Set direction for the internal agent platform (MCP integrations, Langfuse tracing, tool level toggles, least privilege access) and authored the agent migration playbook that answered 14 architecture questions from the founder.',
+          'Replaced Typeform with an internal forms platform, owning its specification, data model and auth design.',
           'Webhook + API architectures for real-time billing, CRM sync and cross-platform data orchestration.',
           'Owned automation strategy and tooling decisions across the AI Solutions surface.',
         ],
@@ -849,7 +953,7 @@
         shipped: [
           {
             name: 'Namo Turn Detector',
-            desc: 'Semantic turn detection so voice agents know when you’re actually done speaking.',
+            desc: 'Semantic turn detection so voice agents know when you’re actually done speaking. 23+ languages, sub 30ms on CPU, 3.8k+ downloads.',
             links: [
               ['PR',      'https://github.com/videosdk-live/agents/pull/72'],
               ['Article', 'https://www.videosdk.live/blog/namo-turn-detection-v1-semantic-turn-detection-for-ai-voice-agents'],
@@ -933,6 +1037,34 @@
       }
     });
 
+    // ── Theme toggle. Follows the device until the visitor picks; picking the
+    //    device's own preference clears the override so the site follows it again.
+    const themeToggle = document.getElementById('themeToggle');
+    const themeColor  = document.getElementById('themeColor');
+    const systemDark  = window.matchMedia('(prefers-color-scheme: dark)');
+    const isDark = () => {
+      const t = document.documentElement.getAttribute('data-theme');
+      return t ? t === 'dark' : systemDark.matches;
+    };
+    const syncThemeColor = () => { if (themeColor) themeColor.content = isDark() ? '#15130d' : '#f6f1e7'; };
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        const next = isDark() ? 'light' : 'dark';
+        try {
+          if ((next === 'dark') === systemDark.matches) {
+            document.documentElement.removeAttribute('data-theme');
+            localStorage.removeItem('theme');
+          } else {
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+          }
+        } catch (e) { document.documentElement.setAttribute('data-theme', next); }
+        syncThemeColor();
+      });
+    }
+    systemDark.addEventListener('change', syncThemeColor);
+    syncThemeColor();
+
     // ── Side nav — scrollspy, appears while scrolling ─────────────────────
     const SIDE_NAV = [
       { id: 'hero',         label: 'Intro' },
@@ -954,22 +1086,28 @@
     let scrolling = false, hovered = false, hideTimer;
     const syncVisible = () => sidenav.classList.toggle('is-visible', scrolling || hovered);
 
-    function onScroll() {
-      const vh = window.innerHeight;
+    function currentSection() {
+      const line = window.innerHeight * 0.45;
       let current = SIDE_NAV[0].id;
       sideEls.forEach((el) => {
-        if (el.getBoundingClientRect().top <= vh * 0.45) current = el.id;
+        if (el.getBoundingClientRect().top <= line) current = el.id;
       });
+      return current;
+    }
+
+    // Drives both the side nav and the mobile progress bar from one scroll event.
+    function onScroll(reveal = true) {
+      const current = currentSection();
       sideLinks.forEach((a) => a.classList.toggle('is-on', a.dataset.id === current));
+      updateTopnav(current);
+      if (!reveal) return;
       scrolling = true;
       syncVisible();
       clearTimeout(hideTimer);
       hideTimer = setTimeout(() => { scrolling = false; syncVisible(); }, 1400);
     }
-    window.addEventListener('scroll', onScroll, { passive: true });
     sidenav.addEventListener('mouseenter', () => { hovered = true; sidenav.classList.add('is-hovered'); syncVisible(); });
     sidenav.addEventListener('mouseleave', () => { hovered = false; sidenav.classList.remove('is-hovered'); syncVisible(); });
-    onScroll();
 
     // ── Top progress bar — mobile alternative to .sidenav ─────────────────
     const topnavFill  = document.getElementById('topnavFill');
@@ -986,25 +1124,20 @@
       }).join('');
     }
 
-    function updateTopnav() {
+    function updateTopnav(current) {
       const docH = document.documentElement.scrollHeight - window.innerHeight;
       topnavFill.style.width = (docH > 0 ? (window.scrollY / docH) * 100 : 0) + '%';
-      const vh = window.innerHeight;
-      let current = SIDE_NAV[0].id;
-      sideEls.forEach((el) => {
-        if (el.getBoundingClientRect().top <= vh * 0.45) current = el.id;
-      });
       topnavTicks.querySelectorAll('.topnav-tick').forEach((a) => {
         a.classList.toggle('is-on', a.dataset.id === current);
       });
     }
 
     layoutTopnav();
-    updateTopnav();
-    window.addEventListener('scroll', updateTopnav, { passive: true });
-    window.addEventListener('resize', () => { layoutTopnav(); updateTopnav(); }, { passive: true });
+    onScroll(false);
+    window.addEventListener('scroll', () => onScroll(true), { passive: true });
+    window.addEventListener('resize', () => { layoutTopnav(); onScroll(false); }, { passive: true });
     if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(() => { layoutTopnav(); updateTopnav(); });
+      document.fonts.ready.then(() => { layoutTopnav(); onScroll(false); });
     }
   })();
   </script>

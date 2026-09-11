@@ -14,27 +14,93 @@
   <meta name="twitter:title"       content="Contact · Aarya Shah" />
   <meta name="twitter:description" content="Get in touch — email, phone, LinkedIn, GitHub, WhatsApp." />
   <meta name="twitter:image"       content="https://github.com/theaarya.png?size=600" />
+  <meta property="og:url"          content="https://theaarya.github.io/contact" />
+  <link rel="canonical" href="https://theaarya.github.io/contact" />
+  <meta name="theme-color" id="themeColor" content="#f6f1e7" />
+  <script>
+    // Apply a saved theme choice before first paint so there is no flash.
+    (function () {
+      try {
+        var t = localStorage.getItem('theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" />
 
   <style>
-    /* ── Tokens — shared with index.html (dark mode, iris accent) ────────── */
+    /* ── Design tokens. Light by default; dark follows the device, or the toggle. ── */
     :root {
-      --cream: #15130d;
-      --cream-2: #1c1916;
-      --paper: #1c1916;
-      --ink: #f0ece2;
-      --ink-2: #d2cdc0;
-      --muted: #9a9485;
-      --rule: #3a3528;
-      --accent: #8b5cf6;
-      --accent-soft: rgba(139, 92, 246, 0.22);
+      color-scheme: light;
+      --cream: #f6f1e7;
+      --cream-2: #efe9dc;
+      --cream-3: #e6dfcf;
+      --paper: #fffdf8;
+      --ink: #17150f;
+      --ink-2: #3d3930;
+      --muted: #6f6a5e;
+      --muted-2: #9a9485;
+      --rule: #d8d1c0;
+      --rule-soft: #e6e0d2;
+      --accent: #6d3fd6;
+      --accent-soft: rgba(109, 63, 214, 0.14);
 
       --serif: 'Instrument Serif', ui-serif, Georgia, serif;
       --sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'Segoe UI', sans-serif;
       --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --cream: #15130d;
+      --cream-2: #1c1916;
+      --cream-3: #2a261f;
+      --paper: #1c1916;
+      --ink: #f0ece2;
+      --ink-2: #d2cdc0;
+      --muted: #9a9485;
+      --muted-2: #6e695d;
+      --rule: #3a3528;
+      --rule-soft: #2a261f;
+      --accent: #8b5cf6;
+      --accent-soft: rgba(139, 92, 246, 0.22);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --cream: #15130d;
+      --cream-2: #1c1916;
+      --cream-3: #2a261f;
+      --paper: #1c1916;
+      --ink: #f0ece2;
+      --ink-2: #d2cdc0;
+      --muted: #9a9485;
+      --muted-2: #6e695d;
+      --rule: #3a3528;
+      --rule-soft: #2a261f;
+      --accent: #8b5cf6;
+      --accent-soft: rgba(139, 92, 246, 0.22);
+      }
+    }
+
+    /* ── Theme toggle ────────────────────────────────────────────────────── */
+    .theme-toggle {
+      position: fixed; top: 14px; right: 14px; z-index: 60;
+      width: 36px; height: 36px; border-radius: 50%; padding: 0;
+      display: grid; place-items: center; cursor: pointer;
+      background: var(--paper); color: var(--muted); border: 1px solid var(--rule);
+      transition: color 0.2s, border-color 0.2s, transform 0.2s;
+    }
+    .theme-toggle:hover { color: var(--accent); border-color: var(--accent); transform: translateY(-1px); }
+    .theme-toggle svg { width: 16px; height: 16px; display: none; }
+    .theme-toggle .i-moon { display: block; }
+    :root[data-theme="dark"] .theme-toggle .i-sun { display: block; }
+    :root[data-theme="dark"] .theme-toggle .i-moon { display: none; }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .theme-toggle .i-sun { display: block; }
+      :root:not([data-theme="light"]) .theme-toggle .i-moon { display: none; }
     }
 
     * { box-sizing: border-box; }
@@ -145,11 +211,15 @@
     @media (max-width: 520px) { .say-hi { right: 16px; bottom: 16px; } }
 
     @media (prefers-reduced-motion: reduce) {
-      .method, .portfolio-btn, .portfolio-btn .arrow, .method-icon, .say-hi { transition: none; }
+      .method, .portfolio-btn, .portfolio-btn .arrow, .method-icon, .say-hi, .theme-toggle { transition: none; }
     }
   </style>
 </head>
 <body>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch between light and dark theme" title="Switch theme">
+    <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
+    <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" /></svg>
+  </button>
   <main class="card">
     <img class="avatar" src="https://github.com/theaarya.png?size=200" alt="Aarya Shah" width="64" height="64" />
     <div class="hi">Hi, I&rsquo;m Aarya Shah.</div>
@@ -217,7 +287,7 @@
       </a>
     </div>
 
-    <a class="portfolio-btn" href="index.html">
+    <a class="portfolio-btn" href="/">
       The bigger picture <span class="arrow">&rarr;</span>
     </a>
 
@@ -231,5 +301,38 @@
     </svg>
     Say hi
   </a>
+
+  <script>
+  (() => {
+    'use strict';
+    // ── Theme toggle. Follows the device until the visitor picks; picking the
+    //    device's own preference clears the override so the site follows it again.
+    const themeToggle = document.getElementById('themeToggle');
+    const themeColor  = document.getElementById('themeColor');
+    const systemDark  = window.matchMedia('(prefers-color-scheme: dark)');
+    const isDark = () => {
+      const t = document.documentElement.getAttribute('data-theme');
+      return t ? t === 'dark' : systemDark.matches;
+    };
+    const syncThemeColor = () => { if (themeColor) themeColor.content = isDark() ? '#15130d' : '#f6f1e7'; };
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        const next = isDark() ? 'light' : 'dark';
+        try {
+          if ((next === 'dark') === systemDark.matches) {
+            document.documentElement.removeAttribute('data-theme');
+            localStorage.removeItem('theme');
+          } else {
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+          }
+        } catch (e) { document.documentElement.setAttribute('data-theme', next); }
+        syncThemeColor();
+      });
+    }
+    systemDark.addEventListener('change', syncThemeColor);
+    syncThemeColor();
+  })();
+  </script>
 </body>
 </html>
