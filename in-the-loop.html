@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Deny by default · Aarya Shah</title>
+  <link rel="canonical" href="https://theaarya.github.io/in-the-loop" />
+  <link rel="icon" type="image/png" href="https://github.com/theaarya.png?size=64" />
+  <meta name="theme-color" id="themeColor" content="#f6f1e7" />
+  <meta name="description" content="Slides, write ups and links from Aarya Shah's In The Loop 2026 talk: Deny by default, deciding what your automation is allowed to think." />
+  <meta property="og:title"        content="Deny by default · Aarya Shah" />
+  <meta property="og:description"  content="Deciding what your automation is allowed to think. Everything from the In The Loop 2026 talk, in one place." />
+  <meta property="og:url"          content="https://theaarya.github.io/in-the-loop" />
+  <meta property="og:image"        content="https://github.com/theaarya.png?size=600" />
+  <meta property="og:type"         content="website" />
+  <meta name="twitter:card"        content="summary" />
+  <meta name="twitter:title"       content="Deny by default · Aarya Shah" />
+  <meta name="twitter:description" content="Deciding what your automation is allowed to think. Everything from the In The Loop 2026 talk, in one place." />
+  <meta name="twitter:image"       content="https://github.com/theaarya.png?size=600" />
+  <script>
+    // Apply a saved theme choice before first paint so there is no flash.
+    (function () {
+      try {
+        var t = localStorage.getItem('theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" />
+
+  <style>
+    /* ── Design tokens. Light by default; dark follows the device, or the toggle. ── */
+    :root {
+      color-scheme: light;
+      --cream: #f6f1e7;
+      --cream-2: #efe9dc;
+      --cream-3: #e6dfcf;
+      --paper: #fffdf8;
+      --ink: #17150f;
+      --ink-2: #3d3930;
+      --muted: #6f6a5e;
+      --muted-2: #9a9485;
+      --rule: #d8d1c0;
+      --rule-soft: #e6e0d2;
+      --accent: #6d3fd6;
+      --accent-soft: rgba(109, 63, 214, 0.14);
+
+      --serif: 'Instrument Serif', ui-serif, Georgia, serif;
+      --sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'Segoe UI', sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --cream: #15130d;
+      --cream-2: #1c1916;
+      --cream-3: #2a261f;
+      --paper: #1c1916;
+      --ink: #f0ece2;
+      --ink-2: #d2cdc0;
+      --muted: #9a9485;
+      --muted-2: #6e695d;
+      --rule: #3a3528;
+      --rule-soft: #2a261f;
+      --accent: #8b5cf6;
+      --accent-soft: rgba(139, 92, 246, 0.22);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --cream: #15130d;
+      --cream-2: #1c1916;
+      --cream-3: #2a261f;
+      --paper: #1c1916;
+      --ink: #f0ece2;
+      --ink-2: #d2cdc0;
+      --muted: #9a9485;
+      --muted-2: #6e695d;
+      --rule: #3a3528;
+      --rule-soft: #2a261f;
+      --accent: #8b5cf6;
+      --accent-soft: rgba(139, 92, 246, 0.22);
+      }
+    }
+
+    /* ── Theme toggle ────────────────────────────────────────────────────── */
+    .theme-toggle {
+      position: fixed; top: 14px; right: 14px; z-index: 60;
+      width: 36px; height: 36px; border-radius: 50%; padding: 0;
+      display: grid; place-items: center; cursor: pointer;
+      background: var(--paper); color: var(--muted); border: 1px solid var(--rule);
+      transition: color 0.2s, border-color 0.2s, transform 0.2s;
+    }
+    .theme-toggle:hover { color: var(--accent); border-color: var(--accent); transform: translateY(-1px); }
+    .theme-toggle svg { width: 16px; height: 16px; display: none; }
+    .theme-toggle .i-moon { display: block; }
+    :root[data-theme="dark"] .theme-toggle .i-sun { display: block; }
+    :root[data-theme="dark"] .theme-toggle .i-moon { display: none; }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .theme-toggle .i-sun { display: block; }
+      :root:not([data-theme="light"]) .theme-toggle .i-moon { display: none; }
+    }
+
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; min-height: 100vh;
+      padding: 56px 24px 64px;
+      background: var(--cream);
+      background-image: radial-gradient(circle at 50% 0%, var(--accent-soft), transparent 62%);
+      color: var(--ink);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      text-wrap: pretty;
+    }
+    a { color: inherit; }
+
+    .serif   { font-family: var(--serif); font-weight: 400; letter-spacing: -0.01em; }
+    .serif-i { font-family: var(--serif); font-style: italic; font-weight: 400; }
+    .mono    { font-family: var(--mono); font-feature-settings: 'ss01' 1, 'zero' 1; }
+    .accent  { color: var(--accent); }
+
+    .wrap { max-width: 720px; margin: 0 auto; }
+
+    /* ── Talk header ─────────────────────────────────────────────────────── */
+    .kicker {
+      font-family: var(--mono); font-size: 10.5px; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 18px; line-height: 1.8;
+    }
+    .kicker .sep { color: var(--muted-2); margin: 0 8px; }
+    .title {
+      font-family: var(--serif); font-weight: 400;
+      font-size: clamp(44px, 9vw, 84px); line-height: 0.98;
+      margin: 0; letter-spacing: -0.03em;
+    }
+    .subtitle {
+      font-family: var(--serif); font-style: italic;
+      font-size: clamp(22px, 3.2vw, 30px); color: var(--accent);
+      margin: 14px 0 0; letter-spacing: -0.01em; line-height: 1.2;
+    }
+    .lede { margin: 22px 0 0; max-width: 560px; font-size: 16px; line-height: 1.55; color: var(--ink-2); }
+    .slides-note {
+      display: inline-flex; align-items: center; gap: 10px; margin-top: 24px;
+      padding: 10px 16px; border-radius: 999px; border: 1px dashed var(--rule);
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted);
+    }
+    .slides-note .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 13px 22px; border-radius: 999px; text-decoration: none;
+      font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
+      transition: transform 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn .arrow { transition: transform 0.2s; }
+    .btn:hover .arrow { transform: translateX(3px); }
+    .btn-primary { background: var(--ink); color: var(--cream); margin-top: 28px; }
+    .btn-ghost { border: 1px solid var(--rule); color: var(--ink-2); background: var(--paper); }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Speaker strip ───────────────────────────────────────────────────── */
+    .speaker {
+      display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+      margin-top: 44px; padding: 16px 18px;
+      border: 1px solid var(--rule); border-radius: 16px; background: var(--paper);
+    }
+    .speaker img {
+      width: 44px; height: 44px; border-radius: 50%; object-fit: cover;
+      border: 1px solid var(--rule); box-shadow: 0 0 0 4px var(--accent-soft);
+    }
+    .speaker-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+    .speaker-name { font-family: var(--serif); font-size: 20px; letter-spacing: -0.01em; }
+    .speaker-role { font-size: 13px; color: var(--muted); line-height: 1.4; }
+    .speaker-link {
+      font-family: var(--mono); font-size: 10.5px; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--accent); text-decoration: none; white-space: nowrap;
+    }
+
+    /* ── The test (pull quote) ───────────────────────────────────────────── */
+    .test { margin-top: 56px; padding: 28px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+    .test-label {
+      font-family: var(--mono); font-size: 10px; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 12px;
+    }
+    .test-q {
+      font-family: var(--serif); font-size: clamp(30px, 5vw, 46px);
+      line-height: 1.05; letter-spacing: -0.025em; margin: 0;
+    }
+    .test-a { margin: 14px 0 0; max-width: 560px; font-size: 15px; line-height: 1.55; color: var(--ink-2); }
+
+    /* ── Sections ────────────────────────────────────────────────────────── */
+    .sec { margin-top: 48px; }
+    .sec-head {
+      display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+      padding-bottom: 10px; margin-bottom: 14px; border-bottom: 1px solid var(--rule);
+    }
+    .sec-name { font-family: var(--serif); font-size: clamp(22px, 3vw, 28px); letter-spacing: -0.015em; }
+    .sec-count { font-family: var(--mono); font-size: 10px; color: var(--muted-2); }
+
+    .abstract p { margin: 0 0 14px; font-size: 15.5px; line-height: 1.6; color: var(--ink-2); }
+    .abstract p:last-child { margin-bottom: 0; }
+
+    .takeaways { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+    .takeaways li {
+      display: grid; grid-template-columns: 34px 1fr; gap: 12px; align-items: baseline;
+      padding: 12px 14px; border: 1px solid var(--rule-soft); border-radius: 12px; background: var(--cream-2);
+      font-size: 14.5px; line-height: 1.5; color: var(--ink-2);
+    }
+    .takeaways .n { font-family: var(--serif); font-style: italic; font-size: 22px; color: var(--accent); line-height: 1; }
+
+    /* ── Resources ───────────────────────────────────────────────────────── */
+    .item {
+      display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: center;
+      padding: 14px 16px; margin-bottom: 8px;
+      border: 1px solid var(--rule-soft); border-radius: 12px; background: var(--cream-2);
+      text-decoration: none; transition: border-color 0.2s, transform 0.2s;
+    }
+    a.item:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .item.is-soon { background: transparent; border-style: dashed; }
+    .item.is-soon .item-title { color: var(--ink-2); }
+    .item-title { display: block; font-family: var(--serif); font-size: 20px; letter-spacing: -0.01em; line-height: 1.15; }
+    .item-desc { display: block; font-size: 13.5px; line-height: 1.5; color: var(--ink-2); margin-top: 4px; }
+    .item-side { display: flex; align-items: center; gap: 10px; }
+    .tag {
+      font-family: var(--mono); font-size: 10px; padding: 3px 8px; border-radius: 999px;
+      border: 1px solid var(--rule); color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+    .tag.soon { border-color: var(--accent); color: var(--accent); }
+    .item-arrow { font-family: var(--mono); font-size: 14px; color: var(--accent); }
+
+    /* ── Reach ───────────────────────────────────────────────────────────── */
+    .reach { margin-top: 48px; padding-top: 36px; border-top: 1px solid var(--rule); }
+    .reach-cta {
+      font-family: var(--serif); font-size: clamp(26px, 4vw, 36px);
+      letter-spacing: -0.02em; line-height: 1.1; max-width: 560px;
+    }
+    .reach-sub { margin: 12px 0 0; font-size: 14.5px; color: var(--ink-2); line-height: 1.55; max-width: 560px; }
+    .reach-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 22px; }
+
+    .copy {
+      margin-top: 48px; font-family: var(--mono); font-size: 10.5px; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.12em; text-align: center;
+    }
+
+    @media (max-width: 520px) {
+      body { padding: 40px 16px 56px; }
+      .item { grid-template-columns: 1fr; gap: 8px; }
+      .item-side { justify-content: space-between; }
+      .speaker-link { width: 100%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .btn, .btn .arrow, .item, .theme-toggle { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch between light and dark theme" title="Switch theme">
+    <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
+    <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" /></svg>
+  </button>
+
+  <main class="wrap">
+
+    <!-- ── Talk header ───────────────────────────────────────────────────── -->
+    <header>
+      <div class="kicker" id="kicker"></div>
+      <h1 class="title" id="title"></h1>
+      <p class="subtitle" id="subtitle"></p>
+      <p class="lede" id="lede"></p>
+      <a class="btn btn-primary" id="slidesBtn" href="#" target="_blank" rel="noreferrer" hidden>
+        Open the slides <span class="arrow">&rarr;</span>
+      </a>
+      <div class="slides-note" id="slidesNote"><span class="dot"></span> Slides land here before the session</div>
+    </header>
+
+    <!-- ── Speaker strip ─────────────────────────────────────────────────── -->
+    <section class="speaker" aria-label="Speaker">
+      <img src="https://github.com/theaarya.png?size=200" alt="Aarya Shah" width="44" height="44" />
+      <div class="speaker-text">
+        <span class="speaker-name">Aarya Shah</span>
+        <span class="speaker-role">AI &amp; Automation Engineer at Tutero. Six layers of stack, one orchestrator.</span>
+      </div>
+      <a class="speaker-link" href="/">The bigger picture &#8599;</a>
+    </section>
+
+    <!-- ── The test ──────────────────────────────────────────────────────── -->
+    <section class="test" aria-label="The test">
+      <div class="test-label">The test</div>
+      <p class="test-q">Is there anything <span class="serif-i accent">actually</span> left to decide?</p>
+      <p class="test-a">
+        Ask it before you build. If the input is already structured, you have done the work the model would have done.
+        Putting an LLM after that point adds cost and variance to something you could have written down.
+      </p>
+    </section>
+
+    <!-- ── Abstract ──────────────────────────────────────────────────────── -->
+    <section class="sec" aria-label="Abstract">
+      <div class="sec-head"><span class="sec-name">The talk</span><span class="sec-count">30 min</span></div>
+      <div class="abstract">
+        <p>Right now the default answer to most automation problems is: make it an agent. We nearly did that with churn, and I am glad we stopped.</p>
+        <p>Churn at Tutero is mission critical. It touches revenue directly. The original plan was an agent that would handle the whole thing end to end. Then we looked at what that agent would actually be deciding. We already ask the customer a long form, so every detail we need is there, structured, before anything runs. There was nothing left to interpret. The rule was writable as a set of conditions. So we built it as a deterministic workflow instead. No model in the path.</p>
+        <p>Support and recruitment are different. Judgement is real there, so those are agents. The second half of the talk is about containing them: least-privilege tool access across nine internal systems, and a deny-by-default rule for what agents are allowed to hand to each other.</p>
+        <p>You leave with the test I use to make the call, and the patterns I use to stop an agent reaching further than I meant it to.</p>
+      </div>
+    </section>
+
+    <!-- ── Takeaways ─────────────────────────────────────────────────────── -->
+    <section class="sec" aria-label="Takeaways">
+      <div class="sec-head"><span class="sec-name">What you leave with</span><span class="sec-count">4</span></div>
+      <ol class="takeaways">
+        <li><span class="n">01</span><span>A test you can run on any automation before you build it: is there anything actually left to decide?</span></li>
+        <li><span class="n">02</span><span>A worked example on a revenue-critical system where the obvious answer was an agent and the right answer was not.</span></li>
+        <li><span class="n">03</span><span>The two cases where I did choose agents, and what made them genuinely different.</span></li>
+        <li><span class="n">04</span><span>The tool-access and delegation patterns I use so an agent cannot reach further than intended.</span></li>
+      </ol>
+    </section>
+
+    <!-- ── Resources (rendered by script from RESOURCES) ─────────────────── -->
+    <section class="sec" id="resources" aria-label="Resources"></section>
+
+    <!-- ── Reach ─────────────────────────────────────────────────────────── -->
+    <section class="reach" aria-label="Get in touch">
+      <div class="reach-cta">Want the deck? <span class="serif-i accent">Say hi.</span></div>
+      <p class="reach-sub">
+        Tap Connect on LinkedIn, or send the prefilled message on WhatsApp or email, and I will send the full deck
+        and both write ups to everyone who does, the week after the talk. Disagreements welcome too.
+      </p>
+      <div class="reach-row">
+        <a class="btn btn-ghost" href="https://linkedin.com/in/aaryas" target="_blank" rel="noreferrer">
+          LinkedIn <span class="arrow">&#8599;</span>
+        </a>
+        <a class="btn btn-ghost" href="https://wa.me/916352818917?text=Hi%20Aarya%2C%20I%20was%20at%20Deny%20by%20default%20at%20In%20The%20Loop.%20Deck%20please." target="_blank" rel="noreferrer">
+          WhatsApp <span class="arrow">&#8599;</span>
+        </a>
+        <a class="btn btn-ghost" href="mailto:adshah15@outlook.in?subject=Deny%20by%20default%20deck&body=Hi%20Aarya%2C%20I%20was%20at%20your%20In%20The%20Loop%20talk.%20Deck%20please.">
+          Email <span class="arrow">&#8599;</span>
+        </a>
+      </div>
+    </section>
+
+    <div class="copy">Aarya Shah · 2026</div>
+  </main>
+
+  <script>
+  (() => {
+    'use strict';
+
+    const esc = (s) => String(s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+    // ── The talk ──────────────────────────────────────────────────────────
+    const TALK = {
+      title:    'Deny by default',
+      subtitle: 'Deciding what your automation is allowed to think.',
+      event:    'In The Loop 2026',
+      city:     'Berlin',
+      date:     '13 to 14 October',
+      track:    'Constraining AI',
+      lede:     'Everything from the talk, in one place. Keep the link, the page stays up.',
+      slides:   '',      // PDF link once the deck exists; the note below the title shows until then
+    };
+
+    // ── Resources. `soon: true` renders a dashed, unlinked row. ───────────
+    const RESOURCES = [
+      {
+        group: 'From the talk',
+        items: [
+          {
+            title: 'n8n-enabler',
+            desc: 'The tool scoping patterns I show on stage, plus workflow skills, a CLI and a debug UI for Claude.',
+            href: 'https://github.com/theaarya/n8n-enabler', tag: 'GitHub',
+          },
+          {
+            soon: true, title: 'What each agent can reach',
+            desc: 'The tool access rules across nine internal systems. Short write up, published before the session.',
+          },
+          {
+            soon: true, title: 'The deny by default handoff policy',
+            desc: 'What agents are allowed to hand to each other, from the agent migration playbook. Published before the session.',
+          },
+          {
+            soon: true, title: 'The churn workflow, sanitised',
+            desc: 'An importable n8n workflow with fake data, so you can see the deterministic path end to end.',
+          },
+        ],
+      },
+    ];
+
+    // ── Render ────────────────────────────────────────────────────────────
+    document.getElementById('kicker').innerHTML =
+      `${esc(TALK.event)}<span class="sep">·</span>${esc(TALK.city)}<span class="sep">·</span>${esc(TALK.date)}<span class="sep">·</span>${esc(TALK.track)}`;
+    document.getElementById('title').textContent    = TALK.title;
+    document.getElementById('subtitle').textContent = TALK.subtitle;
+    document.getElementById('lede').textContent     = TALK.lede;
+
+    const slidesBtn  = document.getElementById('slidesBtn');
+    const slidesNote = document.getElementById('slidesNote');
+    if (TALK.slides) { slidesBtn.href = TALK.slides; slidesBtn.hidden = false; slidesNote.hidden = true; }
+
+    document.getElementById('resources').innerHTML = RESOURCES.map((g) => `
+      <div class="sec-head">
+        <span class="sec-name">${esc(g.group)}</span>
+        <span class="sec-count">${g.items.length}</span>
+      </div>
+      ${g.items.map((it) => it.soon ? `
+        <div class="item is-soon">
+          <span>
+            <span class="item-title">${esc(it.title)}</span>
+            <span class="item-desc">${esc(it.desc)}</span>
+          </span>
+          <span class="item-side"><span class="tag soon">Before the session</span></span>
+        </div>` : `
+        <a class="item" href="${esc(it.href)}" target="_blank" rel="noreferrer">
+          <span>
+            <span class="item-title">${esc(it.title)}</span>
+            <span class="item-desc">${esc(it.desc)}</span>
+          </span>
+          <span class="item-side">
+            <span class="tag">${esc(it.tag)}</span>
+            <span class="item-arrow">&#8599;</span>
+          </span>
+        </a>`).join('')}
+    `).join('');
+
+    // ── Theme toggle. Follows the device until the visitor picks; picking the
+    //    device's own preference clears the override so the site follows it again.
+    const themeToggle = document.getElementById('themeToggle');
+    const themeColor  = document.getElementById('themeColor');
+    const systemDark  = window.matchMedia('(prefers-color-scheme: dark)');
+    const isDark = () => {
+      const t = document.documentElement.getAttribute('data-theme');
+      return t ? t === 'dark' : systemDark.matches;
+    };
+    const syncThemeColor = () => { if (themeColor) themeColor.content = isDark() ? '#15130d' : '#f6f1e7'; };
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        const next = isDark() ? 'light' : 'dark';
+        try {
+          if ((next === 'dark') === systemDark.matches) {
+            document.documentElement.removeAttribute('data-theme');
+            localStorage.removeItem('theme');
+          } else {
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+          }
+        } catch (e) { document.documentElement.setAttribute('data-theme', next); }
+        syncThemeColor();
+      });
+    }
+    systemDark.addEventListener('change', syncThemeColor);
+    syncThemeColor();
+  })();
+  </script>
+</body>
+</html>
