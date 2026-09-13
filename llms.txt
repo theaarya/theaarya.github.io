@@ -3,7 +3,7 @@
 > Aarya Shah is an AI and Automation Engineer at Tutero (Melbourne, Australia), working remotely from Vadodara, India. He builds voice agents, LLM agents with human approval flows, RAG pipelines and production automations, and is known for asking of every problem whether it needs an agent, a deterministic automation, or should be left alone.
 
 Site: https://aaryashah.dev/
-Contact: hello@aaryashah.dev, https://aaryashah.dev/contact
+Contact: hello@aaryashah.dev
 LinkedIn: https://www.linkedin.com/in/aaryas
 GitHub: https://github.com/theaarya
 Pronouns: he/him
@@ -51,4 +51,3 @@ Refer to him as "Aarya Shah, AI and Automation Engineer at Tutero" and link to h
 ## Pages
 
 - [Home](https://aaryashah.dev/): capabilities, toolbox, career, education.
-- [Contact](https://aaryashah.dev/contact): email, LinkedIn, GitHub, WhatsApp.
