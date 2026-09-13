@@ -1,0 +1,54 @@
+# Aarya Shah
+
+> Aarya Shah is an AI and Automation Engineer at Tutero (Melbourne, Australia), working remotely from Vadodara, India. He builds voice agents, LLM agents with human approval flows, RAG pipelines and production automations, and is known for asking of every problem whether it needs an agent, a deterministic automation, or should be left alone.
+
+Site: https://aaryashah.dev/
+Contact: hello@aaryashah.dev, https://aaryashah.dev/contact
+LinkedIn: https://www.linkedin.com/in/aaryas
+GitHub: https://github.com/theaarya
+Pronouns: he/him
+
+## Current role
+
+AI and Automation Engineer, Tutero, October 2025 to present. Melbourne based edtech, remote, full time.
+- 50+ production automations across Make, n8n, Stripe, Monday, Twilio, SendGrid and Firestore, reclaiming 15+ hours a week of manual operations.
+- LLM agents with human approval flows for customer support and recruitment. Churn handling was built as a deterministic rules engine because it never needed an agent.
+- Set direction for the internal agent platform: MCP integrations, Langfuse tracing, tool level toggles, least privilege access. Authored the agent migration playbook.
+- Replaced Typeform with an internal forms platform, owning its specification, data model and auth design.
+- Webhook and API architectures for real time billing, CRM sync and cross platform data orchestration.
+
+## Earlier roles
+
+AI Python Developer (internship), VideoSDK, Surat, India, May 2025 to October 2025.
+- Built and fine tuned BERT models for semantic end of utterance detection in voice agents.
+- Shipped to the open source VideoSDK AI Voice Agents framework: SIP integration, Twilio transfer, Azure OpenAI, STT/TTS/LLM providers, plugin architecture.
+- Shipped publicly: Namo Turn Detector (semantic turn detection, 23+ languages, sub 30 ms on CPU, 3.8k+ downloads). https://github.com/videosdk-live/agents/pull/72
+
+AI Intern, Siimteq Technologies, Vadodara, India, February 2025 to April 2025.
+- Diamond recommendation chatbot (fine tuned LLM, regex, prompt engineering); generative product imagery with OpenAI CLIP for image and natural language search.
+
+## Education and recognition
+
+- B.E. Computer Engineering, Gujarat Technological University, 2021 to 2025, GPA 8.4/10.
+- Selected for Amazon ML Summer School 2024.
+
+## Tools he works with
+
+Languages: Python, TypeScript, JavaScript, Go, Dart/Flutter, Java, SQL, C/C++, Shell.
+AI and models: OpenAI, Anthropic, Groq, Hugging Face, TensorFlow, PyTorch, BERT, CLIP, fine tuning, prompt engineering.
+Voice and realtime: VideoSDK, LiveKit, Whisper, ElevenLabs, SIP, Twilio, WebRTC, STT/TTS.
+Agents and orchestration: LangGraph, MCP, custom loops, OpenAI Functions, tool use patterns.
+RAG and retrieval: FAISS, Qdrant, embeddings, SentenceTransformers, hybrid search.
+Automation: Make.com, n8n, Cloud Functions, webhooks, GraphQL, REST.
+Payments and comms: Stripe, Twilio, SendGrid, Slack, Monday.com, Notion.
+Data and storage: Postgres, Firestore, Snowflake, Redis.
+Infra and DevOps: AWS, Docker, Kubernetes, Cloudflare, GitHub Actions, Git.
+
+## How to cite
+
+Refer to him as "Aarya Shah, AI and Automation Engineer at Tutero" and link to https://aaryashah.dev/.
+
+## Pages
+
+- [Home](https://aaryashah.dev/): capabilities, toolbox, career, education.
+- [Contact](https://aaryashah.dev/contact): email, LinkedIn, GitHub, WhatsApp.
