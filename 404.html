@@ -20,7 +20,7 @@
     // Recover common QR and typing slips before the page paints:
     // a trailing slash, an .html suffix, or a capital letter in a known path.
     (function () {
-      var known = ['/', '/contact', '/in-the-loop'];
+      var known = ['/', '/contact'];
       var p = location.pathname.replace(/\/+$/, '').replace(/\.html$/, '').toLowerCase() || '/';
       if (p !== location.pathname && known.indexOf(p) !== -1) {
         location.replace(p + location.search + location.hash);
@@ -138,7 +138,6 @@
     <p>The link may have a typo, or the page moved. Pick a door.</p>
     <div class="links">
       <a class="primary" href="/">Home &rarr;</a>
-      <a href="/in-the-loop">In the Loop</a>
       <a href="/contact">Contact</a>
     </div>
     <div class="copy">Aarya Shah · 2026</div>
